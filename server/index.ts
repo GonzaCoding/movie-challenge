@@ -20,7 +20,8 @@ async function createServer() {
     app.use(express.static('dist/client'));
   }
 
-  app.get('*', async (req, res) => {
+  // Catch-all handler for SPA routing
+  app.use(async (req, res) => {
     try {
       const url = req.originalUrl;
 

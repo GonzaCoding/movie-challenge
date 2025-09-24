@@ -1,40 +1,68 @@
+@import '../../styles/variables';
+
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  background: #fff;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 1rem 2rem;
+  z-index: 1000;
+  background: rgba($color-surface, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba($color-border, 0.6);
+  padding: $spacing-sm $spacing-lg;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000;
+  transition: border-color 150ms ease;
 
   &__brand {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
     h1 {
       margin: 0;
-      font-size: 1.5rem;
-      color: #333;
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      color: $color-text;
     }
   }
 
   &__actions {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    gap: $spacing-sm;
   }
 
   &__wishlist-btn {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    border-radius: $radius-md;
+    padding: $spacing-xs $spacing-md;
+    background: rgba($color-accent, 0.12);
+    color: $color-accent;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 1px solid transparent;
+    transition: all 150ms ease;
 
     &:hover {
-      background: #0056b3;
+      border-color: rgba($color-accent, 0.4);
+      background: rgba($color-accent, 0.18);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+
+  @media (max-width: $bp-mobile) {
+    padding: $spacing-sm $spacing-md;
+
+    &__brand h1 {
+      font-size: 1rem;
     }
   }
 }
