@@ -1,0 +1,40 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+
+  &__brand {
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #333;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__wishlist-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+}

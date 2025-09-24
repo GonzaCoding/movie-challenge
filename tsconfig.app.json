@@ -22,7 +22,19 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Path mapping */
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@app/*": ["src/app/*"],
+      "@redux/*": ["src/redux/*"],
+      "@queries/*": ["src/queries/*"],
+      "@types/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"],
+      "@styles/*": ["src/styles/*"]
+    }
   },
   "include": ["src"]
 }
