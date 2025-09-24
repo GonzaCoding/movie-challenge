@@ -1,21 +1,23 @@
 # Frontend Movie Browser — Technical Specification
 
 ## 1) Summary & Goals
+
 A React + TypeScript app (bundled with Vite) to **browse movies by category** using TMDB. The **homepage** shows 3 carousels (Popular, Top Rated, Upcoming). Clicking a movie opens a **detail page** with description, poster, and a **category-styled toggle button** to add/remove the movie from a **global wishlist drawer** (accessible from the header). The app supports **SSR (server-render + hydrate)**, **responsive layouts**, **infinite scroll carousels**, **localStorage-persisted wishlist**, and a **clean, maintainable architecture** with testing and code quality tooling.
 
 ---
 
 ## 2) Tech Stack & Constraints
+
 - **Language:** TypeScript (strict)
 - **Framework:** React 18 (no full-stack framework; **no Next.js**)
 - **Bundler & Dev Server:** Vite, **with Vite SSR entry points**
 - **Routing:** React Router
 - **Data Fetching/Caching:** TanStack Query
 - **State Management:** Redux (**single slice** combining wishlist + minimal UI state)
-- **Styling:** SCSS (BEM naming).  
-  - **Per-component `.scss` files** + **one global reset**  
+- **Styling:** SCSS (BEM naming).
+  - **Per-component `.scss` files** + **one global reset**
   - **Global design tokens** via a small `_variables.scss` file (colors, spacing, breakpoints)
-- **UI Libraries:** None (custom components).  
+- **UI Libraries:** None (custom components).
 - **SSR Strategy:** Server renders HTML with data (see section 7), then hydrates on client.
 - **Testing:** Jest + React Testing Library (unit + integration; coverage enabled).
 - **Lint/Format:** ESLint (default rules) + Prettier (format on save).
@@ -27,12 +29,13 @@ A React + TypeScript app (bundled with Vite) to **browse movies by category** us
 ## 3) Feature Requirements
 
 ### Core
+
 - **Homepage**
   - Fixed header with app title/logo and **Wishlist** button (opens **animated side drawer**).
   - **Three carousels**:
-    1. **Popular** *(SSR pre-fetched)*  
-    2. **Top Rated** *(lazy-loaded on client)*
-    3. **Upcoming** *(lazy-loaded on client)*
+    1. **Popular** _(SSR pre-fetched)_
+    2. **Top Rated** _(lazy-loaded on client)_
+    3. **Upcoming** _(lazy-loaded on client)_
   - Carousels:
     - Custom-built, horizontal scroll with **arrow buttons (desktop)** and **swipe gestures (mobile)**.
     - **Infinite scroll** (load more pages as the user scrolls horizontally / reaches end).
@@ -55,6 +58,7 @@ A React + TypeScript app (bundled with Vite) to **browse movies by category** us
   - Simple global 404 route/page.
 
 ### Non-Goals
+
 - No auth/login.
 - No search input (browse only).
 - No ratings or related/recommended sections.
@@ -65,11 +69,13 @@ A React + TypeScript app (bundled with Vite) to **browse movies by category** us
 ## 4) TMDB Integration
 
 ### 4.1 API Key Registration (README step)
+
 1. Create a free TMDB account at `themoviedb.org`.
 2. Navigate to settings → API → request a developer key.
 3. Create a `.env` file from `.env.example` and set `VITE_TMDB_API_KEY=...`.
 
 ### 4.2 Endpoints (examples)
+
 - **Popular**: `/movie/popular`
 - **Top Rated**: `/movie/top_rated`
 - **Upcoming**: `/movie/upcoming`
@@ -82,6 +88,7 @@ A React + TypeScript app (bundled with Vite) to **browse movies by category** us
 ---
 
 ## 5) Data Model (TypeScript Types)
+
 Create a `@types/tmdb.ts` with hand-crafted types (strict TS).
 
 ```ts
@@ -113,6 +120,7 @@ export interface MovieDetail {
 ---
 
 ## 6) Routing
+
 - `/` → **HomePage**
 - `/movie/:id` → **MovieDetailPage**
 - `*` → **NotFoundPage**
@@ -120,6 +128,7 @@ export interface MovieDetail {
 ---
 
 ## 7) SSR Strategy (Vite)
+
 - **Server entry (`src/entry-server.tsx`)**:
   - Create a request-scoped **Redux store** and **TanStack Query client**.
   - For **homepage**:
@@ -137,17 +146,19 @@ export interface MovieDetail {
 ---
 
 ## 8) State Management
+
 - **Redux — single slice** `appSlice`:
   - `wishlist: Record<number, WishlistItem>`
   - `ui: { isWishlistOpen: boolean }`
   - Actions: `toggleWishlistItem(movie)`, `removeWishlistItem(id)`, `openWishlist()`, `closeWishlist()`
-- **Persistence:** 
+- **Persistence:**
   - On app start (client only), **rehydrate** slice from `localStorage`.
   - On slice updates, **serialize** wishlist to `localStorage`.
 
 ---
 
 ## 9) Data Fetching & Caching (TanStack Query)
+
 - Keys:
   - `['movies', 'popular', page]`
   - `['movies', 'top_rated', page]`
@@ -160,7 +171,9 @@ export interface MovieDetail {
 ---
 
 ## 10) SEO
+
 Set per-route SEO on the server:
+
 - **Home:** title “Movie Browser — Popular, Top Rated, Upcoming”, meta description explaining browse by categories.
 - **Detail:** title `${movie.title} — Movie Details`; description `${movie.overview.slice(0, 150)}…`.
 - **OpenGraph:** `og:title`, `og:description`, `og:image` with poster URL.
@@ -168,6 +181,7 @@ Set per-route SEO on the server:
 ---
 
 ## 11) Error Handling & Recovery
+
 - **Error Boundaries** wrap:
   - Home carousels container
   - Detail page content
@@ -180,6 +194,7 @@ Set per-route SEO on the server:
 ---
 
 ## 12) Performance
+
 - **Route-level code splitting**
 - **Lazy load** wishlist drawer
 - **Responsive images**
@@ -190,6 +205,7 @@ Set per-route SEO on the server:
 ---
 
 ## 13) Accessibility (a11y)
+
 - Semantic structure: header/main/aside.
 - Buttons with `aria-label`.
 - Drawer uses `role="complementary"` or `aside`.
@@ -200,6 +216,7 @@ Set per-route SEO on the server:
 ---
 
 ## 14) Styling (SCSS)
+
 - **BEM naming**
 - **Files:**
   - `src/styles/reset.scss`
@@ -251,6 +268,7 @@ __tests__/
 ---
 
 ## 16) Build & Scripts
+
 - `dev`: Vite dev server (SSR enabled)
 - `build`: Vite SSR build
 - `preview`: run built server
@@ -262,6 +280,7 @@ __tests__/
 ---
 
 ## 17) Implementation Details
+
 - **HomePage:** SSR prefetch Popular; lazy-load Top Rated & Upcoming. Infinite scroll per category.
 - **MovieDetailPage:** SSR prefetch detail; category-based styles; wishlist toggle.
 - **WishlistDrawer:** Lazy-loaded, animated slide-in/out, poster+title+badge, remove icon.
@@ -269,6 +288,7 @@ __tests__/
 ---
 
 ## 18) Error & Loading UX
+
 - **Skeletons** for carousels and detail pages.
 - **ErrorPanel** with Retry.
 - **Error Boundaries** with reload fallback.
@@ -276,6 +296,7 @@ __tests__/
 ---
 
 ## 19) Testing Plan
+
 - **Unit:** appSlice reducers, utils.
 - **Integration:** HomePage loads popular + lazy loads others; DetailPage toggle; WishlistDrawer add/remove.
 - **Coverage:** required.
@@ -284,6 +305,7 @@ __tests__/
 ---
 
 ## 20) Accessibility Checklist
+
 - Aria labels on buttons.
 - Drawer focus return.
 - Alt text for posters.
@@ -292,6 +314,7 @@ __tests__/
 ---
 
 ## 21) Performance Checklist
+
 - Code splitting + lazy load.
 - Responsive + lazy images.
 - Query caching tuned.
@@ -300,6 +323,7 @@ __tests__/
 ---
 
 ## 22) Acceptance Criteria
+
 1. Homepage SSR for Popular, lazy load others.
 2. Carousels interactive with arrows/swipe/infinite scroll.
 3. Detail page SSR + category-specific CTA.
@@ -312,6 +336,7 @@ __tests__/
 ---
 
 ## 23) Developer “Day 1” Setup
+
 1. `cp .env.example .env` → set `VITE_TMDB_API_KEY`.
 2. `npm install`
 3. Dev: `npm run dev`

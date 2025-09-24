@@ -1,22 +1,18 @@
 import { hydrateRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { QueryClient, QueryClientProvider, HydrationBoundary } from '@tanstack/react-query';
-import { store } from '@redux/store';
-import { loadState, throttledSaveState } from '@redux/persistence';
+import { QueryClientProvider, HydrationBoundary } from '@tanstack/react-query';
+import type { DehydratedState } from '@tanstack/react-query';
+import { createStore } from './redux/store';
+import { loadState, throttledSaveState } from './redux/persistence';
 import App from './App';
 import './styles/reset.scss';
+import { createQueryClient } from './queries/client';
 
 // Create a client-side query client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      staleTime: 0,
-    },
-  },
-});
+const queryClient = createQueryClient();
 
 // Load persisted state from localStorage
+const store = createStore();
 const persistedState = loadState();
 if (persistedState) {
   store.dispatch({
@@ -31,8 +27,14 @@ store.subscribe(() => {
   throttledSaveState(state.app);
 });
 
+declare global {
+  interface Window {
+    __DEHYDRATED_STATE__?: DehydratedState;
+  }
+}
+
 // Get dehydrated state from window
-const dehydratedState = (window as { __DEHYDRATED_STATE__?: unknown }).__DEHYDRATED_STATE__;
+const dehydratedState = window.__DEHYDRATED_STATE__;
 
 hydrateRoot(
   document.getElementById('root')!,

@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { WishlistItem, AppState } from '../types/tmdb';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { AppState, WishlistItem } from '../types/tmdb';
 
 const initialState: AppState = {
   wishlist: {},
@@ -39,5 +39,8 @@ const appSlice = createSlice({
 
 export const { toggleWishlistItem, removeWishlistItem, openWishlist, closeWishlist, hydrate } =
   appSlice.actions;
+
+export const getDefaultAppState = (): AppState =>
+  appSlice.reducer(undefined, { type: '@@redux/INIT' });
 
 export default appSlice.reducer;

@@ -1,4 +1,4 @@
-import { AppState } from '../types/tmdb';
+import type { AppState } from '../types/tmdb';
 
 const STORAGE_KEY = 'movie-browser-app';
 
@@ -29,7 +29,7 @@ export const saveState = (state: AppState): void => {
 };
 
 // Throttle save operations to avoid excessive localStorage writes
-let saveTimeout: NodeJS.Timeout | null = null;
+let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
 export const throttledSaveState = (state: AppState): void => {
   if (saveTimeout) {

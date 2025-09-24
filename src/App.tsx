@@ -1,4 +1,3 @@
-import React from 'react';
 import Router from './app/router';
 
 interface AppProps {

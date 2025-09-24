@@ -4,6 +4,7 @@ Use these prompts **sequentially** with a code-generation LLM.
 Each prompt **builds on the previous** and **wires new code** into the existing project—no orphaned files.
 
 **Global Constraints & Choices**
+
 - React 18 + TypeScript (strict), Vite bundler with **Vite SSR** (no Next.js).
 - React Router, TanStack Query, Redux (single slice), SCSS (BEM), Jest + RTL.
 - SSR: server-render initial HTML (Popular on Home, Movie Detail), then hydrate.
@@ -15,6 +16,7 @@ Each prompt **builds on the previous** and **wires new code** into the existing 
 ---
 
 ## Prompt 01 — Initialize Vite + SSR skeleton
+
 ```text
 Create a Vite React TypeScript project and add SSR entries.
 
@@ -56,6 +58,7 @@ Create a Vite React TypeScript project and add SSR entries.
 ```
 
 ## Prompt 02 — Router & App shell
+
 ```text
 Add routing and a basic App shell.
 
@@ -86,6 +89,7 @@ Add routing and a basic App shell.
 ```
 
 ## Prompt 03 — ESLint + Prettier + path aliases
+
 ```text
 Configure linting/formatting and clean imports.
 
@@ -110,6 +114,7 @@ Configure linting/formatting and clean imports.
 ```
 
 ## Prompt 04 — Jest + RTL + coverage
+
 ```text
 Set up Jest with React Testing Library and coverage.
 
@@ -137,7 +142,8 @@ Set up Jest with React Testing Library and coverage.
 ```
 
 ## Prompt 05 — Redux store (single slice) + persistence
-```text
+
+````text
 Create Redux store and single app slice with localStorage persistence.
 
 **What to do**
@@ -152,27 +158,32 @@ Create Redux store and single app slice with localStorage persistence.
     wishlist: Record<number, WishlistItem>;
     ui: { isWishlistOpen: boolean };
   }
-  ```
+````
+
 - Reducers:
   - `toggleWishlistItem(item: WishlistItem)` (add if missing, remove if present)
   - `removeWishlistItem(id: number)`
   - `openWishlist()` / `closeWishlist()`
 
-4) `src/redux/store.ts`:
+4. `src/redux/store.ts`:
+
 - `configureStore({ reducer: { app: appReducer } })`
 - Export `RootState`, `AppDispatch`
 
-5) `src/redux/persistence.ts`:
+5. `src/redux/persistence.ts`:
+
 - `loadState()` reads JSON from `localStorage.getItem("app")` (client only).
 - `saveState()` persists only the `wishlist` key; throttle writes (e.g., 500ms).
 
-6) Wire in `entry-client.tsx`:
+6. Wire in `entry-client.tsx`:
+
 - Create store, load persisted state on boot, subscribe to save changes.
 
 **Acceptance criteria**
+
 - Able to dispatch `openWishlist()` without errors; state persists across reloads.
 
-```
+````
 
 ## Prompt 06 — TanStack Query + SSR dehydration glue
 ```text
@@ -193,9 +204,10 @@ Add React Query and dehydration.
 **Acceptance criteria**
 - App still runs; no data yet but hydration pipeline is wired.
 
-```
+````
 
 ## Prompt 07 — SCSS variables, BEM, and base utils
+
 ```text
 Establish styling foundation.
 
@@ -217,6 +229,7 @@ Establish styling foundation.
 ```
 
 ## Prompt 08 — TMDB types & fetcher
+
 ```text
 Implement TMDB types and fetch utilities.
 
@@ -244,6 +257,7 @@ Implement TMDB types and fetch utilities.
 ```
 
 ## Prompt 09 — MovieCard + responsive images
+
 ```text
 Create a reusable MovieCard component with responsive images.
 
@@ -267,6 +281,7 @@ Create a reusable MovieCard component with responsive images.
 ```
 
 ## Prompt 10 — Skeleton & ErrorPanel
+
 ```text
 Create loading and error UI components.
 
@@ -286,6 +301,7 @@ Create loading and error UI components.
 ```
 
 ## Prompt 11 — HomePage: SSR prefetch Popular (page 1)
+
 ```text
 Wire SSR data for Popular movies on the HomePage.
 
@@ -307,6 +323,7 @@ Wire SSR data for Popular movies on the HomePage.
 ```
 
 ## Prompt 12 — Carousel component (structure + arrows)
+
 ```text
 Build the Carousel structure with arrow buttons.
 
@@ -328,6 +345,7 @@ Build the Carousel structure with arrow buttons.
 ```
 
 ## Prompt 13 — useCarousel hook (infinite & controls)
+
 ```text
 Add a hook to manage scroll logic and a sentinel for infinite loading.
 
@@ -345,6 +363,7 @@ Add a hook to manage scroll logic and a sentinel for infinite loading.
 ```
 
 ## Prompt 14 — Infinite Query for Popular
+
 ```text
 Convert Popular to infinite query and load more pages on end reached.
 
@@ -361,6 +380,7 @@ Convert Popular to infinite query and load more pages on end reached.
 ```
 
 ## Prompt 15 — Lazy Top Rated & Upcoming rows
+
 ```text
 Add Top Rated and Upcoming carousels as lazy client-only sections.
 
@@ -378,6 +398,7 @@ Add Top Rated and Upcoming carousels as lazy client-only sections.
 ```
 
 ## Prompt 16 — Swipe gestures (mobile)
+
 ```text
 Add mobile swipe for the Carousel.
 
@@ -395,6 +416,7 @@ Add mobile swipe for the Carousel.
 ```
 
 ## Prompt 17 — Navigation from cards
+
 ```text
 Clicking a movie card navigates to the detail page and passes category.
 
@@ -408,6 +430,7 @@ Clicking a movie card navigates to the detail page and passes category.
 ```
 
 ## Prompt 18 — Detail route SSR + SEO
+
 ```text
 Server-prefetch the detail data and set SEO tags.
 
@@ -427,6 +450,7 @@ Server-prefetch the detail data and set SEO tags.
 ```
 
 ## Prompt 19 — Category fonts & CTA styles
+
 ```text
 Add simple category-based font and button variants on the detail page.
 
@@ -443,6 +467,7 @@ Add simple category-based font and button variants on the detail page.
 ```
 
 ## Prompt 20 — Wishlist toggle
+
 ```text
 Connect the CTA button to Redux wishlist (toggle add/remove).
 
@@ -458,6 +483,7 @@ Connect the CTA button to Redux wishlist (toggle add/remove).
 ```
 
 ## Prompt 21 — Scroll restoration
+
 ```text
 Restore scroll position when navigating back to Home.
 
@@ -474,6 +500,7 @@ Restore scroll position when navigating back to Home.
 ```
 
 ## Prompt 22 — Wishlist Drawer (lazy)
+
 ```text
 Add the animated wishlist drawer, lazy-loaded.
 
@@ -495,6 +522,7 @@ Add the animated wishlist drawer, lazy-loaded.
 ```
 
 ## Prompt 23 — Persistence polish
+
 ```text
 Verify Redux ↔ localStorage end-to-end.
 
@@ -510,6 +538,7 @@ Verify Redux ↔ localStorage end-to-end.
 ```
 
 ## Prompt 24 — Error boundaries & retry
+
 ```text
 Add error boundaries around key sections and wire retry buttons.
 
@@ -529,6 +558,7 @@ Add error boundaries around key sections and wire retry buttons.
 ```
 
 ## Prompt 25 — Performance tune
+
 ```text
 Optimize images, queries, and re-renders.
 
@@ -548,6 +578,7 @@ Optimize images, queries, and re-renders.
 ```
 
 ## Prompt 26 — 404 page & header polish
+
 ```text
 Finalize global 404 and ensure header layout is solid.
 
@@ -563,6 +594,7 @@ Finalize global 404 and ensure header layout is solid.
 ```
 
 ## Prompt 27 — Unit tests
+
 ```text
 Add unit tests for reducers and utils with coverage.
 
@@ -584,6 +616,7 @@ Add unit tests for reducers and utils with coverage.
 ```
 
 ## Prompt 28 — Integration tests
+
 ```text
 Add integration tests with mocked data objects (no MSW).
 
@@ -606,6 +639,7 @@ Add integration tests with mocked data objects (no MSW).
 ```
 
 ## Prompt 29 — README & .env.example
+
 ```text
 Add minimal documentation and env sample.
 
@@ -623,6 +657,7 @@ Add minimal documentation and env sample.
 ```
 
 ## Prompt 30 — Final pass (a11y & code tidy)
+
 ```text
 Do a final quality pass.
 
