@@ -1,7 +1,8 @@
 import { hydrateRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider, HydrationBoundary } from '@tanstack/react-query';
-import { configureStore } from '@reduxjs/toolkit';
+import { store } from '@redux/store';
+import { loadState, throttledSaveState } from '@redux/persistence';
 import App from './App';
 import './styles/reset.scss';
 
@@ -15,11 +16,19 @@ const queryClient = new QueryClient({
   },
 });
 
-// Create a client-side store
-const store = configureStore({
-  reducer: {
-    app: (state = { wishlist: {}, ui: { isWishlistOpen: false } }) => state,
-  },
+// Load persisted state from localStorage
+const persistedState = loadState();
+if (persistedState) {
+  store.dispatch({
+    type: 'app/hydrate',
+    payload: persistedState,
+  });
+}
+
+// Subscribe to store changes and persist to localStorage
+store.subscribe(() => {
+  const state = store.getState();
+  throttledSaveState(state.app);
 });
 
 // Get dehydrated state from window

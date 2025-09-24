@@ -21,11 +21,22 @@ function AppLayout() {
 }
 
 export default function Router({ url }: RouterProps) {
-  const RouterComponent = url ? StaticRouter : BrowserRouter;
-  const routerProps = url ? { location: url } : {};
+  if (url) {
+    return (
+      <StaticRouter location={url}>
+        <Routes>
+          <Route path="/" element={<AppLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="movie/:id" element={<MovieDetailPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </StaticRouter>
+    );
+  }
 
   return (
-    <RouterComponent {...routerProps}>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<AppLayout />}>
           <Route index element={<HomePage />} />
@@ -33,6 +44,6 @@ export default function Router({ url }: RouterProps) {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
-    </RouterComponent>
+    </BrowserRouter>
   );
 }
