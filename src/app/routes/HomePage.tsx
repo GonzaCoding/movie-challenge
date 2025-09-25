@@ -3,6 +3,7 @@ import { MovieCard } from '../../components/MovieCard';
 import { Carousel } from '../../components/Carousel';
 import { CardSkeleton, RowSkeleton } from '../../components/Skeleton';
 import { ErrorPanel } from '../../components/ErrorPanel';
+import LazyMovieRow from '../../components/LazyMovieRow';
 import { fetchPopular, moviesKey } from '../../queries/tmdb';
 import type { MovieSummary } from '../../types/tmdb';
 
@@ -96,6 +97,12 @@ function HomePage() {
           </div>
         )}
       </section>
+
+      {/* Lazy-loaded Top Rated Movies */}
+      <LazyMovieRow category="top_rated" title="Top Rated Movies" />
+
+      {/* Lazy-loaded Upcoming Movies */}
+      <LazyMovieRow category="upcoming" title="Upcoming Movies" />
 
       {/* Demo: Skeleton Loading */}
       <section style={{ marginTop: '3rem' }}>

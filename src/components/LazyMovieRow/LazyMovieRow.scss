@@ -1,0 +1,24 @@
+@use '../../styles/variables' as *;
+
+.lazy-movie-row {
+  margin-top: $spacing-2xl;
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: $spacing-lg;
+    color: $color-text;
+  }
+
+  &__content {
+    margin-top: $spacing-md;
+  }
+
+  &__skeleton {
+    margin-top: $spacing-md;
+  }
+
+  &__error {
+    margin-top: $spacing-md;
+  }
+}
