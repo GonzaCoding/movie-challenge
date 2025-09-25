@@ -1,0 +1,53 @@
+@use '../../styles/variables' as *;
+
+// Shimmer animation keyframes
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, $color-border 25%, rgba($color-border, 0.5) 50%, $color-border 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: $radius-sm;
+}
+
+.skeleton--card {
+  width: 100%;
+  aspect-ratio: 2/3;
+  border-radius: $radius-md;
+}
+
+.skeleton--text {
+  height: 1rem;
+  margin-bottom: $spacing-xs;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  &--title {
+    height: 1.2rem;
+    width: 80%;
+  }
+  
+  &--subtitle {
+    height: 0.9rem;
+    width: 60%;
+  }
+}
+
+.skeleton--row {
+  display: flex;
+  gap: $spacing-md;
+  overflow: hidden;
+  
+  .skeleton--card {
+    flex: 0 0 200px;
+  }
+}

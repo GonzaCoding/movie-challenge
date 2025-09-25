@@ -1,0 +1,56 @@
+@use '../../styles/variables' as *;
+
+.error-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+  min-height: 200px;
+  background: $color-surface;
+  border-radius: $radius-md;
+  border: 1px solid rgba($color-accent, 0.2);
+}
+
+.error-panel__content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.error-panel__icon {
+  font-size: 2rem;
+  margin-bottom: $spacing-md;
+}
+
+.error-panel__message {
+  color: $color-text-muted;
+  margin: 0 0 $spacing-lg 0;
+  line-height: 1.5;
+}
+
+.error-panel__retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-lg;
+  background: $color-accent;
+  color: white;
+  border: none;
+  border-radius: $radius-md;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+
+  &:hover {
+    background: darken($color-accent, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: 2px solid rgba($color-accent, 0.5);
+    outline-offset: 2px;
+  }
+}
