@@ -14,9 +14,12 @@ export async function render(url: string) {
   // Prefetch popular movies data for the home page
   if (url === '/') {
     try {
-      await queryClient.prefetchQuery({
-        queryKey: moviesKey('popular', 1),
-        queryFn: () => fetchPopular(1),
+      await queryClient.prefetchInfiniteQuery({
+        queryKey: moviesKey('popular'),
+        queryFn: ({ pageParam = 1 }) => fetchPopular(pageParam),
+        getNextPageParam: (lastPage) =>
+          lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+        initialPageParam: 1,
       });
     } catch (error) {
       console.error('Failed to prefetch popular movies:', error);

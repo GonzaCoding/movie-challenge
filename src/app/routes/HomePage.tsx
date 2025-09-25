@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { MovieCard } from '../../components/MovieCard';
 import { Carousel } from '../../components/Carousel';
 import { CardSkeleton, RowSkeleton } from '../../components/Skeleton';
@@ -24,15 +24,24 @@ const sampleMovieNoPoster: MovieSummary = {
 
 function HomePage() {
   const {
-    data: popularMovies,
+    data,
     isLoading,
     isError,
     error,
     refetch,
-  } = useQuery({
-    queryKey: moviesKey('popular', 1),
-    queryFn: () => fetchPopular(1),
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: moviesKey('popular'),
+    queryFn: ({ pageParam = 1 }) => fetchPopular(pageParam),
+    getNextPageParam: (lastPage) =>
+      lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+    initialPageParam: 1,
   });
+
+  // Flatten all pages' results into a single array
+  const allMovies = data?.pages.flatMap((page) => page.results) ?? [];
 
   return (
     <main>
@@ -58,17 +67,31 @@ function HomePage() {
           </div>
         )}
 
-        {popularMovies && (
+        {allMovies.length > 0 && (
           <div style={{ marginTop: '1rem' }}>
-            <Carousel>
-              {popularMovies.results.map((movie) => (
-                <div key={movie.id} style={{ flex: '0 0 200px' }}>
+            <Carousel onEndReached={() => fetchNextPage()}>
+              {allMovies.map((movie, index) => (
+                <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
                   <MovieCard
                     movie={movie}
                     onClick={() => console.log(`Clicked on ${movie.title}`)}
                   />
                 </div>
               ))}
+              {/* Show loading skeletons while fetching next page */}
+              {isFetchingNextPage && (
+                <>
+                  <div key="skeleton-1" style={{ flex: '0 0 200px' }}>
+                    <CardSkeleton />
+                  </div>
+                  <div key="skeleton-2" style={{ flex: '0 0 200px' }}>
+                    <CardSkeleton />
+                  </div>
+                  <div key="skeleton-3" style={{ flex: '0 0 200px' }}>
+                    <CardSkeleton />
+                  </div>
+                </>
+              )}
             </Carousel>
           </div>
         )}
