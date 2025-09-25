@@ -9,6 +9,8 @@ const config: Config = {
         tsconfig: {
           jsx: 'react-jsx',
           esModuleInterop: true,
+          module: 'esnext',
+          target: 'es2020',
         },
       },
     ],
@@ -23,7 +25,7 @@ const config: Config = {
     '^@utils/(.*)$': '<rootDir>/src/utils/$1',
     '^@styles/(.*)$': '<rootDir>/src/styles/$1',
   },
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts', '<rootDir>/src/test/setupMatchers.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',

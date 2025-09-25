@@ -8,3 +8,4 @@ export const truncate = (text: string, max: number): string => {
 
   return `${text.slice(0, maxLength).trimEnd()}${ellipsis}`;
 };
+

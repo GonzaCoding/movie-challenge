@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server/index.ts",
+    "dev:client": "vite",
     "build": "tsc -b && vite build",
     "preview": "NODE_ENV=production node dist/server/entry-server.js",
     "lint": "eslint .",

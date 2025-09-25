@@ -21,7 +21,11 @@ async function createServer() {
   }
 
   // Catch-all handler for SPA routing
-  app.use(async (req, res) => {
+  app.use(async (req, res, next) => {
+    // Skip static files and API routes
+    if (req.path.startsWith('/_next') || req.path.startsWith('/api') || req.path.includes('.')) {
+      return next();
+    }
     try {
       const url = req.originalUrl;
 
