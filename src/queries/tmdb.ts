@@ -3,7 +3,7 @@ import type { Category, MovieSummary, MovieDetail, PagedResponse } from '../type
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // Get API key from environment
-const API_KEY = process.env.VITE_TMDB_API_KEY || 'test_api_key';
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY || 'test_api_key';
 
 /**
  * Base fetch utility for TMDB API

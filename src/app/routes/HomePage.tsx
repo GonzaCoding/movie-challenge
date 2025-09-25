@@ -1,6 +1,8 @@
+import { useQuery } from '@tanstack/react-query';
 import { MovieCard } from '../../components/MovieCard';
 import { CardSkeleton, RowSkeleton } from '../../components/Skeleton';
 import { ErrorPanel } from '../../components/ErrorPanel';
+import { fetchPopular, moviesKey } from '../../queries/tmdb';
 import type { MovieSummary } from '../../types/tmdb';
 
 // Sample data for demonstration
@@ -20,36 +22,63 @@ const sampleMovieNoPoster: MovieSummary = {
 };
 
 function HomePage() {
+  const {
+    data: popularMovies,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: moviesKey('popular', 1),
+    queryFn: () => fetchPopular(1),
+  });
+
   return (
     <main>
       <h1>Home</h1>
       <p>Popular movies will be displayed here</p>
 
-      {/* Demo: MovieCards */}
+      {/* Popular Movies Section */}
       <section style={{ marginTop: '2rem' }}>
-        <h2>Movie Cards</h2>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
-            marginTop: '1rem',
-          }}
-        >
-          <MovieCard
-            movie={sampleMovie}
-            onClick={() => console.log('Clicked on The Dark Knight')}
-          />
-          <MovieCard
-            movie={sampleMovieNoPoster}
-            onClick={() => console.log('Clicked on Movie Without Poster')}
-          />
-        </div>
+        <h2>Popular Movies</h2>
+
+        {isLoading && (
+          <div style={{ marginTop: '1rem' }}>
+            <RowSkeleton count={5} />
+          </div>
+        )}
+
+        {isError && (
+          <div style={{ marginTop: '1rem' }}>
+            <ErrorPanel
+              message={error?.message || 'Failed to load popular movies'}
+              onRetry={() => refetch()}
+            />
+          </div>
+        )}
+
+        {popularMovies && (
+          <div
+            style={{
+              display: 'flex',
+              gap: '1rem',
+              marginTop: '1rem',
+              overflowX: 'auto',
+              paddingBottom: '1rem',
+            }}
+          >
+            {popularMovies.results.map((movie) => (
+              <div key={movie.id} style={{ flex: '0 0 200px' }}>
+                <MovieCard movie={movie} onClick={() => console.log(`Clicked on ${movie.title}`)} />
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Demo: Skeleton Loading */}
       <section style={{ marginTop: '3rem' }}>
-        <h2>Skeleton Loading</h2>
+        <h2>Skeleton Loading Demo</h2>
         <div style={{ marginTop: '1rem' }}>
           <h3>Card Skeletons</h3>
           <div
@@ -74,10 +103,10 @@ function HomePage() {
 
       {/* Demo: Error Panel */}
       <section style={{ marginTop: '3rem' }}>
-        <h2>Error States</h2>
+        <h2>Error States Demo</h2>
         <div style={{ marginTop: '1rem' }}>
           <ErrorPanel
-            message="Failed to load movies. Please check your connection."
+            message="This is a demo error panel"
             onRetry={() => console.log('Retry clicked')}
           />
         </div>
