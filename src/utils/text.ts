@@ -1,6 +1,6 @@
-export const truncate = (text: string, max: number): string => {
-  if (text.length <= max) {
-    return text;
+export const truncate = (text: string | null | undefined, max: number): string => {
+  if (!text || text.length <= max) {
+    return text || '';
   }
 
   const ellipsis = '…';
@@ -8,4 +8,3 @@ export const truncate = (text: string, max: number): string => {
 
   return `${text.slice(0, maxLength).trimEnd()}${ellipsis}`;
 };
-
