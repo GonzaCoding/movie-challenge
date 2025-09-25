@@ -1,5 +1,4 @@
 @use '../../styles/variables' as *;
-@use 'sass:color';
 
 .error-panel {
   display: flex;
@@ -42,7 +41,7 @@
   transition: all 150ms ease;
 
   &:hover {
-    background: color.scale($color-accent, $lightness: -10%);
+    background: rgba($color-accent, 0.8);
     transform: translateY(-1px);
   }
 

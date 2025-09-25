@@ -3,7 +3,16 @@ import type { Category, MovieSummary, MovieDetail, PagedResponse } from '../type
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // Get API key from environment
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || 'test_api_key';
+const getApiKey = () => {
+  // In browser/Vite environment
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return import.meta.env.VITE_TMDB_API_KEY || 'test_api_key';
+  }
+  // In Node.js/Jest environment
+  return process.env.VITE_TMDB_API_KEY || 'test_api_key';
+};
+
+const API_KEY = getApiKey();
 
 /**
  * Base fetch utility for TMDB API
