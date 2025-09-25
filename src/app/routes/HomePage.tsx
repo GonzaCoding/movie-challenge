@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { MovieCard } from '../../components/MovieCard';
+import { Carousel } from '../../components/Carousel';
 import { CardSkeleton, RowSkeleton } from '../../components/Skeleton';
 import { ErrorPanel } from '../../components/ErrorPanel';
 import { fetchPopular, moviesKey } from '../../queries/tmdb';
@@ -58,20 +59,17 @@ function HomePage() {
         )}
 
         {popularMovies && (
-          <div
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              marginTop: '1rem',
-              overflowX: 'auto',
-              paddingBottom: '1rem',
-            }}
-          >
-            {popularMovies.results.map((movie) => (
-              <div key={movie.id} style={{ flex: '0 0 200px' }}>
-                <MovieCard movie={movie} onClick={() => console.log(`Clicked on ${movie.title}`)} />
-              </div>
-            ))}
+          <div style={{ marginTop: '1rem' }}>
+            <Carousel>
+              {popularMovies.results.map((movie) => (
+                <div key={movie.id} style={{ flex: '0 0 200px' }}>
+                  <MovieCard
+                    movie={movie}
+                    onClick={() => console.log(`Clicked on ${movie.title}`)}
+                  />
+                </div>
+              ))}
+            </Carousel>
           </div>
         )}
       </section>
