@@ -63,6 +63,7 @@
     margin: 0 $spacing-xl; // Space for arrows
     scrollbar-width: none; // Firefox
     -ms-overflow-style: none; // IE/Edge
+    touch-action: pan-x; // Allow horizontal panning for swipe gestures
 
     &::-webkit-scrollbar {
       display: none; // Chrome/Safari
