@@ -18,8 +18,6 @@ function TestHomePage() {
 
   return (
     <div>
-      <h1>Home</h1>
-      <p>Popular movies will be displayed here</p>
       <section>
         <h2>Popular Movies</h2>
         <div className="movie-card" onClick={() => handleMovieClick({ id: 1 }, 'popular')}>
@@ -31,13 +29,6 @@ function TestHomePage() {
       </section>
       <section>
         <h2>Upcoming Movies</h2>
-      </section>
-      <section>
-        <h2>Skeleton Loading Demo</h2>
-      </section>
-      <section>
-        <h2>Error States Demo</h2>
-        <div>This is a demo error panel</div>
       </section>
     </div>
   );
@@ -65,11 +56,6 @@ describe('HomePage Navigation', () => {
     mockQueryClient.clear();
   });
 
-  it('should render the home page title', () => {
-    renderWithProviders(<TestHomePage />);
-    expect(screen.getByText('Home')).toBeInTheDocument();
-  });
-
   it('should render popular movies section', () => {
     renderWithProviders(<TestHomePage />);
     expect(screen.getByText('Popular Movies')).toBeInTheDocument();
@@ -79,17 +65,6 @@ describe('HomePage Navigation', () => {
     renderWithProviders(<TestHomePage />);
     expect(screen.getByText('Top Rated Movies')).toBeInTheDocument();
     expect(screen.getByText('Upcoming Movies')).toBeInTheDocument();
-  });
-
-  it('should render skeleton loading demo sections', () => {
-    renderWithProviders(<TestHomePage />);
-    expect(screen.getByText('Skeleton Loading Demo')).toBeInTheDocument();
-    expect(screen.getByText('Error States Demo')).toBeInTheDocument();
-  });
-
-  it('should render error panel demo', () => {
-    renderWithProviders(<TestHomePage />);
-    expect(screen.getByText('This is a demo error panel')).toBeInTheDocument();
   });
 
   it('should handle movie card clicks with navigation', () => {

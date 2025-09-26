@@ -8,41 +8,17 @@ import LazyMovieRow from '../../components/LazyMovieRow';
 import { fetchPopular, moviesKey } from '../../queries/tmdb';
 import type { MovieSummary, Category } from '../../types/tmdb';
 
-// Sample data for demonstration
-const sampleMovie: MovieSummary = {
-  id: 1,
-  title: 'The Dark Knight',
-  overview:
-    'When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.',
-  poster_path: '/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
-};
-
-const sampleMovieNoPoster: MovieSummary = {
-  id: 2,
-  title: 'Movie Without Poster',
-  overview: 'A movie that has no poster image available.',
-  poster_path: null,
-};
-
 function HomePage() {
   const navigate = useNavigate();
 
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: moviesKey('popular'),
-    queryFn: ({ pageParam = 1 }) => fetchPopular(pageParam),
-    getNextPageParam: (lastPage) =>
-      lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
-    initialPageParam: 1,
-  });
+  const { data, isLoading, isError, error, refetch, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: moviesKey('popular'),
+      queryFn: ({ pageParam = 1 }) => fetchPopular(pageParam),
+      getNextPageParam: (lastPage) =>
+        lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+      initialPageParam: 1,
+    });
 
   // Flatten all pages' results into a single array
   const allMovies = data?.pages.flatMap((page) => page.results) ?? [];
@@ -56,9 +32,6 @@ function HomePage() {
 
   return (
     <main>
-      <h1>Home</h1>
-      <p>Popular movies will be displayed here</p>
-
       {/* Popular Movies Section */}
       <section style={{ marginTop: '2rem' }}>
         <h2>Popular Movies</h2>
@@ -110,42 +83,6 @@ function HomePage() {
 
       {/* Lazy-loaded Upcoming Movies */}
       <LazyMovieRow category="upcoming" title="Upcoming Movies" />
-
-      {/* Demo: Skeleton Loading */}
-      <section style={{ marginTop: '3rem' }}>
-        <h2>Skeleton Loading Demo</h2>
-        <div style={{ marginTop: '1rem' }}>
-          <h3>Card Skeletons</h3>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '1rem',
-              marginTop: '1rem',
-            }}
-          >
-            <CardSkeleton />
-            <CardSkeleton />
-            <CardSkeleton />
-          </div>
-        </div>
-
-        <div style={{ marginTop: '2rem' }}>
-          <h3>Row Skeleton</h3>
-          <RowSkeleton count={4} />
-        </div>
-      </section>
-
-      {/* Demo: Error Panel */}
-      <section style={{ marginTop: '3rem' }}>
-        <h2>Error States Demo</h2>
-        <div style={{ marginTop: '1rem' }}>
-          <ErrorPanel
-            message="This is a demo error panel"
-            onRetry={() => console.log('Retry clicked')}
-          />
-        </div>
-      </section>
     </main>
   );
 }

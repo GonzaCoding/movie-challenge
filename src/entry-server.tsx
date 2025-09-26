@@ -30,7 +30,7 @@ export async function render(url: string) {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <StaticRouter location={url}>
-          <App url={url} />
+          <App />
         </StaticRouter>
       </QueryClientProvider>
     </Provider>,

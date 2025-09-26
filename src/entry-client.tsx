@@ -43,7 +43,7 @@ hydrateRoot(
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={dehydratedState}>
         <BrowserRouter>
-          <App url={undefined} />
+          <App />
         </BrowserRouter>
       </HydrationBoundary>
     </QueryClientProvider>

@@ -5,10 +5,6 @@ import MovieDetailPage from './app/routes/MovieDetailPage';
 import NotFoundPage from './app/routes/NotFoundPage';
 import Header from './components/Header/Header';
 
-interface AppProps {
-  url?: string;
-}
-
 function AppLayout() {
   return (
     <>
@@ -20,7 +16,7 @@ function AppLayout() {
   );
 }
 
-function App({ url }: AppProps) {
+function App() {
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>
