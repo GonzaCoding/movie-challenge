@@ -31,9 +31,9 @@ function HomePage() {
   };
 
   return (
-    <main>
+    <div style={{ padding: '0 1.5rem' }}>
       {/* Popular Movies Section */}
-      <section style={{ marginTop: '2rem' }}>
+      <section style={{ marginTop: '4rem' }}>
         <h2>Popular Movies</h2>
 
         {isLoading && (
@@ -83,7 +83,7 @@ function HomePage() {
 
       {/* Lazy-loaded Upcoming Movies */}
       <LazyMovieRow category="upcoming" title="Upcoming Movies" />
-    </main>
+    </div>
   );
 }
 

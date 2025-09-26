@@ -6,9 +6,10 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba($color-surface, 0.85);
+  background: rgba($color-surface, 0.95);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba($color-border, 0.6);
+  border-bottom: 2px solid rgba($color-border, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: $spacing-sm $spacing-lg;
   display: flex;
   justify-content: space-between;
