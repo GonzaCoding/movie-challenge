@@ -1,8 +1,22 @@
 @use '../../styles/variables' as *;
+@use 'sass:color';
 
 .movie-detail {
   padding: 0 1.5rem;
   margin-top: 2rem;
+
+  // Category-based font modifiers
+  &--popular {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  }
+
+  &--top-rated {
+    font-family: 'Georgia', 'Times New Roman', 'Times', serif;
+  }
+
+  &--upcoming {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  }
 
   &__skeleton {
     display: flex;
@@ -119,6 +133,55 @@
       line-height: 1.6;
       color: $color-text-muted;
       margin: 0;
+    }
+  }
+
+  &__actions {
+    margin-top: 2rem;
+  }
+
+  &__cta {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: $radius-md;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    // Category-based button modifiers
+    &--popular {
+      background: $color-accent;
+      color: white;
+      
+      &:hover {
+        background: color.scale($color-accent, $lightness: -10%);
+        transform: translateY(-1px);
+      }
+    }
+
+    &--top-rated {
+      background: transparent;
+      color: #ffd700;
+      border: 2px solid #ffd700;
+      
+      &:hover {
+        background: #ffd700;
+        color: $color-bg;
+        transform: translateY(-1px);
+      }
+    }
+
+    &--upcoming {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      
+      &:hover {
+        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
     }
   }
 }

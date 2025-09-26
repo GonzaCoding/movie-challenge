@@ -55,17 +55,21 @@ const renderWithProviders = (component: React.ReactElement) => {
   );
 };
 
-// Mock useParams
+// Mock useParams and useLocation
 const mockUseParams = jest.fn();
+const mockUseLocation = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockUseParams(),
+  useLocation: () => mockUseLocation(),
 }));
 
 describe('MovieDetailPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockQueryClient.clear();
+    // Default location state
+    mockUseLocation.mockReturnValue({ state: { category: 'popular' } });
   });
 
   it('should render loading state', () => {
@@ -154,5 +158,190 @@ describe('MovieDetailPage', () => {
     renderWithProviders(<MovieDetailPage />);
     // Invalid ID should not trigger loading state, it should show not found
     expect(screen.getByText('Movie not found')).toBeInTheDocument();
+  });
+
+  describe('Category-based styling', () => {
+    const mockMovie = {
+      id: 123,
+      title: 'Test Movie',
+      overview: 'This is a test movie overview.',
+      poster_path: '/test-poster.jpg',
+    };
+
+    beforeEach(() => {
+      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
+      fetchMovieDetail.mockResolvedValue(mockMovie);
+    });
+
+    it('should apply popular category class by default', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'popular' } });
+
+      const { container } = renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const detailElement = container.querySelector('.movie-detail');
+      expect(detailElement).toHaveClass('movie-detail--popular');
+    });
+
+    it('should apply top-rated category class', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'top-rated' } });
+
+      const { container } = renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const detailElement = container.querySelector('.movie-detail');
+      expect(detailElement).toHaveClass('movie-detail--top-rated');
+    });
+
+    it('should apply upcoming category class', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'upcoming' } });
+
+      const { container } = renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const detailElement = container.querySelector('.movie-detail');
+      expect(detailElement).toHaveClass('movie-detail--upcoming');
+    });
+
+    it('should fallback to popular category when no state provided', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: null });
+
+      const { container } = renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const detailElement = container.querySelector('.movie-detail');
+      expect(detailElement).toHaveClass('movie-detail--popular');
+    });
+
+    it('should fallback to popular category when category is undefined', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: undefined } });
+
+      const { container } = renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const detailElement = container.querySelector('.movie-detail');
+      expect(detailElement).toHaveClass('movie-detail--popular');
+    });
+  });
+
+  describe('CTA Button', () => {
+    const mockMovie = {
+      id: 123,
+      title: 'Test Movie',
+      overview: 'This is a test movie overview.',
+      poster_path: '/test-poster.jpg',
+    };
+
+    beforeEach(() => {
+      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
+      fetchMovieDetail.mockResolvedValue(mockMovie);
+    });
+
+    it('should render CTA button with popular category class', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'popular' } });
+
+      renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      expect(ctaButton).toBeInTheDocument();
+      expect(ctaButton).toHaveClass('movie-detail__cta--popular');
+    });
+
+    it('should render CTA button with top-rated category class', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'top-rated' } });
+
+      renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      expect(ctaButton).toBeInTheDocument();
+      expect(ctaButton).toHaveClass('movie-detail__cta--top-rated');
+    });
+
+    it('should render CTA button with upcoming category class', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'upcoming' } });
+
+      renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      expect(ctaButton).toBeInTheDocument();
+      expect(ctaButton).toHaveClass('movie-detail__cta--upcoming');
+    });
+
+    it('should render CTA button in loading state with category class', () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'top-rated' } });
+
+      const { container } = renderWithProviders(<MovieDetailPage />);
+
+      const detailElement = container.querySelector('.movie-detail');
+      expect(detailElement).toHaveClass('movie-detail--top-rated');
+    });
+
+    it('should render CTA button in error state with category class', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'upcoming' } });
+      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
+      fetchMovieDetail.mockRejectedValueOnce(new Error('Failed to fetch'));
+
+      const { container } = renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('error-panel')).toBeInTheDocument();
+      });
+
+      const detailElement = container.querySelector('.movie-detail');
+      expect(detailElement).toHaveClass('movie-detail--upcoming');
+    });
+
+    it('should render CTA button in not found state with category class', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'popular' } });
+      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
+      fetchMovieDetail.mockResolvedValueOnce(null);
+
+      const { container } = renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Movie not found')).toBeInTheDocument();
+      });
+
+      const detailElement = container.querySelector('.movie-detail');
+      expect(detailElement).toHaveClass('movie-detail--popular');
+    });
   });
 });

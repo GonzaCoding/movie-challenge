@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchMovieDetail, movieKey } from '../../queries/tmdb';
 import { ErrorPanel } from '../../components/ErrorPanel';
@@ -8,7 +8,11 @@ import './MovieDetailPage.scss';
 
 function MovieDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const movieId = id ? parseInt(id, 10) : 0;
+
+  // Get category from route state, fallback to 'popular'
+  const category = (location.state as { category?: string })?.category || 'popular';
 
   const {
     data: movie,
@@ -24,7 +28,7 @@ function MovieDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="movie-detail">
+      <div className={`movie-detail movie-detail--${category}`}>
         <div className="movie-detail__skeleton">
           <CardSkeleton />
         </div>
@@ -34,7 +38,7 @@ function MovieDetailPage() {
 
   if (isError) {
     return (
-      <div className="movie-detail">
+      <div className={`movie-detail movie-detail--${category}`}>
         <ErrorPanel
           message={error?.message || 'Failed to load movie details'}
           onRetry={() => refetch()}
@@ -45,7 +49,7 @@ function MovieDetailPage() {
 
   if (!movie) {
     return (
-      <div className="movie-detail">
+      <div className={`movie-detail movie-detail--${category}`}>
         <div className="movie-detail__not-found">
           <h1>Movie not found</h1>
           <p>The movie you're looking for doesn't exist.</p>
@@ -55,7 +59,7 @@ function MovieDetailPage() {
   }
 
   return (
-    <div className="movie-detail">
+    <div className={`movie-detail movie-detail--${category}`}>
       <div className="movie-detail__content">
         <div className="movie-detail__poster">
           <img
@@ -90,6 +94,12 @@ function MovieDetailPage() {
               <p>{movie.overview}</p>
             </div>
           )}
+
+          <div className="movie-detail__actions">
+            <button className={`movie-detail__cta movie-detail__cta--${category}`}>
+              Add to Wishlist
+            </button>
+          </div>
         </div>
       </div>
     </div>
