@@ -1,0 +1,125 @@
+@use '../../styles/variables' as *;
+
+.movie-detail {
+  padding: 0 1.5rem;
+  margin-top: 2rem;
+
+  &__skeleton {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  &__not-found {
+    text-align: center;
+    padding: 3rem 0;
+
+    h1 {
+      color: $color-text;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: $color-text-muted;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    align-items: start;
+
+    @media (max-width: $bp-tablet) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  &__poster {
+    position: sticky;
+    top: 6rem; // Account for fixed header
+
+    @media (max-width: $bp-tablet) {
+      position: static;
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  &__poster-image {
+    width: 100%;
+    max-width: 300px;
+    border-radius: $radius-md;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    background: $color-bg;
+  }
+
+  &__info {
+    color: $color-text;
+  }
+
+  &__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+    color: $color-text;
+
+    @media (max-width: $bp-mobile) {
+      font-size: 2rem;
+    }
+  }
+
+  &__tagline {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: $color-text-muted;
+    margin: 0 0 1.5rem 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+
+    span {
+      padding: 0.5rem 1rem;
+      background: rgba($color-surface, 0.6);
+      border-radius: $radius-sm;
+      border: 1px solid rgba($color-border, 0.3);
+    }
+  }
+
+  &__year {
+    color: $color-accent;
+    font-weight: 600;
+  }
+
+  &__runtime {
+    color: $color-text-muted;
+  }
+
+  &__rating {
+    color: #ffd700;
+    font-weight: 600;
+  }
+
+  &__overview {
+    h2 {
+      font-size: 1.5rem;
+      margin: 0 0 1rem 0;
+      color: $color-text;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: $color-text-muted;
+      margin: 0;
+    }
+  }
+}
+

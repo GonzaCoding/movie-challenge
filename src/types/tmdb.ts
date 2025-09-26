@@ -12,6 +12,10 @@ export interface MovieDetail {
   title: string;
   overview: string;
   poster_path: string | null;
+  tagline?: string;
+  release_date?: string;
+  runtime?: number;
+  vote_average?: number;
 }
 
 export interface PagedResponse<T> {

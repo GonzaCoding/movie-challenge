@@ -29,6 +29,40 @@
     }
   }
 
+  &__back-btn {
+    background: none;
+    border: none;
+    color: $color-text;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: $radius-sm;
+    transition: all 150ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+
+    &:hover {
+      background: rgba($color-accent, 0.1);
+      color: $color-accent;
+    }
+
+    &:active {
+      transform: translateX(-2px);
+    }
+  }
+
+  &__title--clickable {
+    cursor: pointer;
+    transition: color 150ms ease;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+
   &__actions {
     display: flex;
     align-items: center;

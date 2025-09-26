@@ -5,7 +5,7 @@ import { MovieCard } from '../MovieCard';
 import { Carousel } from '../Carousel';
 import { RowSkeleton, CardSkeleton } from '../Skeleton';
 import { ErrorPanel } from '../ErrorPanel';
-import { fetchTopRated, fetchUpcoming, moviesKey } from '../../queries/tmdb';
+import { fetchPopular, fetchTopRated, fetchUpcoming, moviesKey } from '../../queries/tmdb';
 import type { Category, MovieSummary } from '../../types/tmdb';
 
 interface LazyMovieRowProps {
@@ -14,6 +14,7 @@ interface LazyMovieRowProps {
 }
 
 const fetchFunctions = {
+  popular: fetchPopular,
   top_rated: fetchTopRated,
   upcoming: fetchUpcoming,
 };
