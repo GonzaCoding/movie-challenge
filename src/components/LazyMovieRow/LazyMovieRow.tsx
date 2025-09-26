@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { MovieCard } from '../MovieCard';
 import { Carousel } from '../Carousel';
@@ -18,6 +19,7 @@ const fetchFunctions = {
 };
 
 export default function LazyMovieRow({ category, title }: LazyMovieRowProps) {
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
   const rowRef = useRef<HTMLDivElement>(null);
@@ -33,6 +35,13 @@ export default function LazyMovieRow({ category, title }: LazyMovieRowProps) {
 
   // Flatten all pages' results into a single array
   const allMovies = data?.pages.flatMap((page) => page.results) ?? [];
+
+  // Navigation handler
+  const handleMovieClick = (movie: MovieSummary) => {
+    navigate(`/movie/${movie.id}`, {
+      state: { category },
+    });
+  };
 
   // Set up IntersectionObserver
   useEffect(() => {
@@ -90,7 +99,7 @@ export default function LazyMovieRow({ category, title }: LazyMovieRowProps) {
           <Carousel onEndReached={() => fetchNextPage()}>
             {allMovies.map((movie, index) => (
               <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
-                <MovieCard movie={movie} onClick={() => console.log(`Clicked on ${movie.title}`)} />
+                <MovieCard movie={movie} onClick={() => handleMovieClick(movie)} />
               </div>
             ))}
             {/* Show loading skeletons while fetching next page */}

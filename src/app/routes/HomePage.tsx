@@ -1,11 +1,12 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { MovieCard } from '../../components/MovieCard';
 import { Carousel } from '../../components/Carousel';
 import { CardSkeleton, RowSkeleton } from '../../components/Skeleton';
 import { ErrorPanel } from '../../components/ErrorPanel';
 import LazyMovieRow from '../../components/LazyMovieRow';
 import { fetchPopular, moviesKey } from '../../queries/tmdb';
-import type { MovieSummary } from '../../types/tmdb';
+import type { MovieSummary, Category } from '../../types/tmdb';
 
 // Sample data for demonstration
 const sampleMovie: MovieSummary = {
@@ -24,6 +25,8 @@ const sampleMovieNoPoster: MovieSummary = {
 };
 
 function HomePage() {
+  const navigate = useNavigate();
+
   const {
     data,
     isLoading,
@@ -43,6 +46,13 @@ function HomePage() {
 
   // Flatten all pages' results into a single array
   const allMovies = data?.pages.flatMap((page) => page.results) ?? [];
+
+  // Navigation handler for popular movies
+  const handleMovieClick = (movie: MovieSummary, category: Category) => {
+    navigate(`/movie/${movie.id}`, {
+      state: { category },
+    });
+  };
 
   return (
     <main>
@@ -73,10 +83,7 @@ function HomePage() {
             <Carousel onEndReached={() => fetchNextPage()}>
               {allMovies.map((movie, index) => (
                 <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
-                  <MovieCard
-                    movie={movie}
-                    onClick={() => console.log(`Clicked on ${movie.title}`)}
-                  />
+                  <MovieCard movie={movie} onClick={() => handleMovieClick(movie, 'popular')} />
                 </div>
               ))}
               {/* Show loading skeletons while fetching next page */}
