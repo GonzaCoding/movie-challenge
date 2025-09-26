@@ -65,15 +65,13 @@ describe('scrollRestoration', () => {
         value: 100,
         writable: true,
       });
-      
+
       const carouselScrolls = { popular: 200, top_rated: 150 };
       scrollRestoration.saveScrollPosition('/home', carouselScrolls);
 
       const mockCarousel1 = { scrollLeft: 0 };
       const mockCarousel2 = { scrollLeft: 0 };
-      mockQuerySelector
-        .mockReturnValueOnce(mockCarousel1)
-        .mockReturnValueOnce(mockCarousel2);
+      mockQuerySelector.mockReturnValueOnce(mockCarousel1).mockReturnValueOnce(mockCarousel2);
 
       const result = scrollRestoration.restoreScrollPosition('/home');
 
@@ -100,7 +98,7 @@ describe('scrollRestoration', () => {
         value: 100,
         writable: true,
       });
-      
+
       scrollRestoration.saveScrollPosition('/home', { popular: 200 });
 
       mockQuerySelector.mockReturnValue(null);
@@ -141,7 +139,7 @@ describe('scrollRestoration', () => {
 describe('useScrollRestoration', () => {
   it('should return scroll restoration functions', () => {
     const result = useScrollRestoration('/home');
-    
+
     expect(result).toHaveProperty('savePosition');
     expect(result).toHaveProperty('restorePosition');
     expect(result).toHaveProperty('clearPosition');
@@ -152,7 +150,7 @@ describe('useScrollRestoration', () => {
 
   it('should save position with carousel scrolls', () => {
     const { savePosition } = useScrollRestoration('/home');
-    
+
     Object.defineProperty(window, 'scrollY', {
       value: 150,
       writable: true,
@@ -170,9 +168,9 @@ describe('useScrollRestoration', () => {
 
   it('should restore position', () => {
     const { restorePosition } = useScrollRestoration('/home');
-    
+
     scrollRestoration.saveScrollPosition('/home', { popular: 200 });
-    
+
     const mockCarousel = { scrollLeft: 0 };
     mockQuerySelector.mockReturnValue(mockCarousel);
 
@@ -185,7 +183,7 @@ describe('useScrollRestoration', () => {
 
   it('should clear position', () => {
     const { clearPosition } = useScrollRestoration('/home');
-    
+
     scrollRestoration.saveScrollPosition('/home', { popular: 200 });
     expect(scrollRestoration.getCurrentScrollPosition()).not.toBeNull();
 

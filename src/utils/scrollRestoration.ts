@@ -34,7 +34,7 @@ class ScrollRestorationManager {
     if (position) {
       // Restore main scroll position
       window.scrollTo(0, position.scrollY);
-      
+
       // Restore carousel scroll positions
       Object.entries(position.carouselScrolls).forEach(([carouselId, scrollLeft]) => {
         const carousel = document.querySelector(`[data-carousel-id="${carouselId}"]`);
@@ -42,7 +42,7 @@ class ScrollRestorationManager {
           carousel.scrollLeft = scrollLeft;
         }
       });
-      
+
       return position;
     }
     return null;
