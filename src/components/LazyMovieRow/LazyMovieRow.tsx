@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { MovieCard } from '../MovieCard';
@@ -11,6 +11,7 @@ import type { Category, MovieSummary } from '../../types/tmdb';
 interface LazyMovieRowProps {
   category: Category;
   title: string;
+  onCarouselRef?: (ref: HTMLDivElement | null) => void;
 }
 
 const fetchFunctions = {
@@ -19,7 +20,7 @@ const fetchFunctions = {
   upcoming: fetchUpcoming,
 };
 
-export default function LazyMovieRow({ category, title }: LazyMovieRowProps) {
+const LazyMovieRow = forwardRef<HTMLDivElement, LazyMovieRowProps>(({ category, title, onCarouselRef }, ref) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
@@ -71,7 +72,7 @@ export default function LazyMovieRow({ category, title }: LazyMovieRowProps) {
   }, [hasMounted]);
 
   return (
-    <section ref={rowRef} style={{ marginTop: '3rem' }}>
+    <section ref={ref} style={{ marginTop: '3rem' }}>
       <h2>{title}</h2>
 
       {!isVisible && (
@@ -97,7 +98,11 @@ export default function LazyMovieRow({ category, title }: LazyMovieRowProps) {
 
       {isVisible && allMovies.length > 0 && (
         <div style={{ marginTop: '1rem' }}>
-          <Carousel onEndReached={() => fetchNextPage()}>
+          <Carousel 
+            onEndReached={() => fetchNextPage()}
+            data-carousel-id={category}
+            ref={onCarouselRef}
+          >
             {allMovies.map((movie, index) => (
               <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
                 <MovieCard movie={movie} onClick={() => handleMovieClick(movie)} />
@@ -122,4 +127,8 @@ export default function LazyMovieRow({ category, title }: LazyMovieRowProps) {
       )}
     </section>
   );
-}
+});
+
+LazyMovieRow.displayName = 'LazyMovieRow';
+
+export default LazyMovieRow;

@@ -66,7 +66,10 @@ const createMockStore = (initialState: Partial<AppState> = {}) => {
   });
 };
 
-const renderWithProviders = (component: React.ReactElement, initialState: Partial<AppState> = {}) => {
+const renderWithProviders = (
+  component: React.ReactElement,
+  initialState: Partial<AppState> = {},
+) => {
   const store = createMockStore(initialState);
   return render(
     <Provider store={store}>

@@ -14,14 +14,14 @@ function MovieDetailPage() {
   const location = useLocation();
   const dispatch = useDispatch();
   const movieId = id ? parseInt(id, 10) : 0;
-  
+
   // Get category from route state, fallback to 'popular'
   const category = (location.state as { category?: string })?.category || 'popular';
-  
+
   // Redux state
   const wishlist = useSelector((state: { app: AppState }) => state.app.wishlist);
   const isInWishlist = movieId > 0 && !!wishlist[movieId];
-  
+
   // Wishlist toggle handler
   const handleWishlistToggle = () => {
     if (movie && movieId > 0) {
@@ -117,7 +117,7 @@ function MovieDetailPage() {
           )}
 
           <div className="movie-detail__actions">
-            <button 
+            <button
               className={`movie-detail__cta movie-detail__cta--${category}`}
               onClick={handleWishlistToggle}
             >

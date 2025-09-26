@@ -1,16 +1,18 @@
 import './Carousel.scss';
 import { useCarousel } from './useCarousel';
+import { forwardRef } from 'react';
 
 interface CarouselProps {
   children: React.ReactNode[];
   onEndReached?: () => void;
+  'data-carousel-id'?: string;
 }
 
-export default function Carousel({ children, onEndReached }: CarouselProps) {
+const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({ children, onEndReached, ...props }, ref) => {
   const { trackRef, endSentinelRef, scrollPrev, scrollNext } = useCarousel(onEndReached);
 
   return (
-    <div className="carousel">
+    <div className="carousel" ref={ref} {...props}>
       <button
         className="carousel__arrow carousel__arrow--left"
         onClick={scrollPrev}
@@ -35,4 +37,8 @@ export default function Carousel({ children, onEndReached }: CarouselProps) {
       </button>
     </div>
   );
-}
+});
+
+Carousel.displayName = 'Carousel';
+
+export default Carousel;
