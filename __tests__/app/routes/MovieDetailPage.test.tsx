@@ -1,8 +1,12 @@
 import '@testing-library/jest-dom';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import MovieDetailPage from '../../../src/app/routes/MovieDetailPage';
+import appReducer from '../../../src/redux/appSlice';
+import type { AppState } from '../../../src/types/tmdb';
 
 // Mock the TMDB queries
 jest.mock('../../../src/queries/tmdb', () => ({
@@ -47,11 +51,29 @@ const mockQueryClient = new QueryClient({
   },
 });
 
-const renderWithProviders = (component: React.ReactElement) => {
+const createMockStore = (initialState: Partial<AppState> = {}) => {
+  return configureStore({
+    reducer: {
+      app: appReducer,
+    },
+    preloadedState: {
+      app: {
+        wishlist: {},
+        ui: { isWishlistOpen: false },
+        ...initialState,
+      },
+    },
+  });
+};
+
+const renderWithProviders = (component: React.ReactElement, initialState: Partial<AppState> = {}) => {
+  const store = createMockStore(initialState);
   return render(
-    <QueryClientProvider client={mockQueryClient}>
-      <BrowserRouter>{component}</BrowserRouter>
-    </QueryClientProvider>,
+    <Provider store={store}>
+      <QueryClientProvider client={mockQueryClient}>
+        <BrowserRouter>{component}</BrowserRouter>
+      </QueryClientProvider>
+    </Provider>,
   );
 };
 
@@ -342,6 +364,122 @@ describe('MovieDetailPage', () => {
 
       const detailElement = container.querySelector('.movie-detail');
       expect(detailElement).toHaveClass('movie-detail--popular');
+    });
+  });
+
+  describe('Wishlist Toggle', () => {
+    const mockMovie = {
+      id: 123,
+      title: 'Test Movie',
+      overview: 'This is a test movie overview.',
+      poster_path: '/test-poster.jpg',
+    };
+
+    beforeEach(() => {
+      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
+      fetchMovieDetail.mockResolvedValue(mockMovie);
+    });
+
+    it('should show "Add to Wishlist" when movie is not in wishlist', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'popular' } });
+
+      renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      expect(ctaButton).toBeInTheDocument();
+    });
+
+    it('should show "Remove from Wishlist" when movie is in wishlist', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'popular' } });
+
+      const initialState = {
+        wishlist: {
+          123: {
+            id: 123,
+            title: 'Test Movie',
+            poster_path: '/test-poster.jpg',
+            category: 'popular' as const,
+          },
+        },
+      };
+
+      renderWithProviders(<MovieDetailPage />, initialState);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const ctaButton = screen.getByRole('button', { name: 'Remove from Wishlist' });
+      expect(ctaButton).toBeInTheDocument();
+    });
+
+    it('should toggle wishlist item when button is clicked', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'top-rated' } });
+
+      const { container } = renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      expect(ctaButton).toBeInTheDocument();
+
+      // Click the button
+      fireEvent.click(ctaButton);
+
+      // Button text should change to "Remove from Wishlist"
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: 'Remove from Wishlist' })).toBeInTheDocument();
+      });
+    });
+
+    it('should handle wishlist toggle with different categories', async () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'upcoming' } });
+
+      renderWithProviders(<MovieDetailPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Movie')).toBeInTheDocument();
+      });
+
+      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      expect(ctaButton).toHaveClass('movie-detail__cta--upcoming');
+
+      fireEvent.click(ctaButton);
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: 'Remove from Wishlist' })).toBeInTheDocument();
+      });
+    });
+
+    it('should not toggle when movie data is not available', () => {
+      mockUseParams.mockReturnValue({ id: '123' });
+      mockUseLocation.mockReturnValue({ state: { category: 'popular' } });
+
+      // Don't mock fetchMovieDetail to simulate loading state
+      renderWithProviders(<MovieDetailPage />);
+
+      // Should not render CTA button in loading state
+      expect(screen.queryByRole('button', { name: 'Add to Wishlist' })).not.toBeInTheDocument();
+    });
+
+    it('should handle invalid movie ID gracefully', () => {
+      mockUseParams.mockReturnValue({ id: 'invalid' });
+      mockUseLocation.mockReturnValue({ state: { category: 'popular' } });
+
+      renderWithProviders(<MovieDetailPage />);
+
+      // Should not render CTA button for invalid ID
+      expect(screen.queryByRole('button', { name: 'Add to Wishlist' })).not.toBeInTheDocument();
     });
   });
 });

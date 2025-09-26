@@ -1,18 +1,39 @@
 import { useParams, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchMovieDetail, movieKey } from '../../queries/tmdb';
 import { ErrorPanel } from '../../components/ErrorPanel';
 import { CardSkeleton } from '../../components/Skeleton';
 import { posterUrlForSize } from '../../utils/images';
+import { toggleWishlistItem } from '../../redux/appSlice';
+import type { AppState, WishlistItem } from '../../types/tmdb';
 import './MovieDetailPage.scss';
 
 function MovieDetailPage() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
+  const dispatch = useDispatch();
   const movieId = id ? parseInt(id, 10) : 0;
-
+  
   // Get category from route state, fallback to 'popular'
   const category = (location.state as { category?: string })?.category || 'popular';
+  
+  // Redux state
+  const wishlist = useSelector((state: { app: AppState }) => state.app.wishlist);
+  const isInWishlist = movieId > 0 && !!wishlist[movieId];
+  
+  // Wishlist toggle handler
+  const handleWishlistToggle = () => {
+    if (movie && movieId > 0) {
+      const wishlistItem: WishlistItem = {
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+        category: category as 'popular' | 'top_rated' | 'upcoming',
+      };
+      dispatch(toggleWishlistItem(wishlistItem));
+    }
+  };
 
   const {
     data: movie,
@@ -96,8 +117,11 @@ function MovieDetailPage() {
           )}
 
           <div className="movie-detail__actions">
-            <button className={`movie-detail__cta movie-detail__cta--${category}`}>
-              Add to Wishlist
+            <button 
+              className={`movie-detail__cta movie-detail__cta--${category}`}
+              onClick={handleWishlistToggle}
+            >
+              {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
             </button>
           </div>
         </div>
