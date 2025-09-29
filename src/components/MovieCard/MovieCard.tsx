@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { MovieSummary, Category, WishlistItem } from '../../types/tmdb';
 import { toggleWishlistItem } from '../../redux/appSlice';
@@ -12,7 +13,7 @@ interface MovieCardProps {
   showWishlistButton?: boolean;
 }
 
-export default function MovieCard({
+const MovieCard = React.memo(function MovieCard({
   movie,
   onClick,
   category,
@@ -22,26 +23,29 @@ export default function MovieCard({
   const wishlist = useSelector((state: { app: AppState }) => state.app.wishlist);
   const isInWishlist = !!wishlist[movie.id];
 
-  const handleWishlistToggle = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent card click when clicking wishlist button
+  const handleWishlistToggle = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation(); // Prevent card click when clicking wishlist button
 
-    if (category) {
-      const wishlistItem: WishlistItem = {
-        id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-        category,
-      };
-      dispatch(toggleWishlistItem(wishlistItem));
-    }
-  };
+      if (category) {
+        const wishlistItem: WishlistItem = {
+          id: movie.id,
+          title: movie.title,
+          poster_path: movie.poster_path,
+          category,
+        };
+        dispatch(toggleWishlistItem(wishlistItem));
+      }
+    },
+    [dispatch, movie.id, movie.title, movie.poster_path, category],
+  );
 
   return (
     <div className="movie-card" onClick={onClick}>
       <div className="movie-card__image-container">
         <img
           className="movie-card__image"
-          src={posterUrlForSize(movie.poster_path, 'desktop')}
+          src={posterUrlForSize(movie.poster_path, 'mobile')}
           alt={movie.title}
           loading="lazy"
         />
@@ -61,4 +65,6 @@ export default function MovieCard({
       )}
     </div>
   );
-}
+});
+
+export default MovieCard;

@@ -48,7 +48,7 @@ export default function WishlistDrawer({ onClose, openerRef }: WishlistDrawerPro
   const handleClose = () => {
     dispatch(closeWishlist());
     onClose();
-    
+
     // Return focus to the opener button
     if (openerRef?.current) {
       openerRef.current.focus();
@@ -131,16 +131,18 @@ export default function WishlistDrawer({ onClose, openerRef }: WishlistDrawerPro
                 <li key={item.id} className="wishlist-drawer__item">
                   <div className="wishlist-drawer__poster">
                     <img
-                      src={posterUrlForSize(item.poster_path, 'desktop')}
+                      src={posterUrlForSize(item.poster_path, 'thumb')}
                       alt={item.title}
                       className="wishlist-drawer__poster-image"
                     />
                   </div>
-                  
+
                   <div className="wishlist-drawer__info">
                     <h3 className="wishlist-drawer__movie-title">{item.title}</h3>
                     <div className="wishlist-drawer__badges">
-                      <span className={`wishlist-drawer__badge ${getCategoryBadgeColor(item.category)}`}>
+                      <span
+                        className={`wishlist-drawer__badge ${getCategoryBadgeColor(item.category)}`}
+                      >
                         {getCategoryLabel(item.category)}
                       </span>
                     </div>

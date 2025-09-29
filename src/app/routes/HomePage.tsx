@@ -24,6 +24,7 @@ function HomePage() {
       getNextPageParam: (lastPage) =>
         lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
       initialPageParam: 1,
+      staleTime: 60000, // 1 minute - carousels data
     });
 
   // Flatten all pages' results into a single array
@@ -39,7 +40,7 @@ function HomePage() {
       }
     });
     savePosition(carouselScrolls);
-    
+
     navigate(`/movie/${movie.id}`, {
       state: { category },
     });
@@ -91,7 +92,7 @@ function HomePage() {
 
           {allMovies.length > 0 && (
             <div style={{ marginTop: '1rem' }}>
-              <Carousel 
+              <Carousel
                 onEndReached={() => fetchNextPage()}
                 data-carousel-id="popular"
                 ref={(el) => {
@@ -100,8 +101,8 @@ function HomePage() {
               >
                 {allMovies.map((movie, index) => (
                   <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
-                    <MovieCard 
-                      movie={movie} 
+                    <MovieCard
+                      movie={movie}
                       onClick={() => handleMovieClick(movie, 'popular')}
                       category="popular"
                       showWishlistButton={true}
@@ -130,8 +131,8 @@ function HomePage() {
 
       {/* Lazy-loaded Top Rated Movies */}
       <ErrorBoundary>
-        <LazyMovieRow 
-          category="top_rated" 
+        <LazyMovieRow
+          category="top_rated"
           title="Top Rated Movies"
           onCarouselRef={(el) => {
             carouselRefs.current.top_rated = el;
@@ -141,8 +142,8 @@ function HomePage() {
 
       {/* Lazy-loaded Upcoming Movies */}
       <ErrorBoundary>
-        <LazyMovieRow 
-          category="upcoming" 
+        <LazyMovieRow
+          category="upcoming"
           title="Upcoming Movies"
           onCarouselRef={(el) => {
             carouselRefs.current.upcoming = el;

@@ -46,6 +46,7 @@ function MovieDetailPage() {
     queryKey: movieKey(movieId),
     queryFn: () => fetchMovieDetail(movieId),
     enabled: !!movieId,
+    staleTime: 300000, // 5 minutes - detail page data
   });
 
   if (isLoading) {

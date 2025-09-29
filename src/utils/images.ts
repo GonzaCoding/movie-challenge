@@ -1,10 +1,26 @@
 /**
  * Generate TMDB poster URL with responsive sizing
+ * Optimized with memoization for better performance
  */
-export function posterUrlForSize(path: string | null, size: 'mobile' | 'desktop'): string {
+
+// Memoization cache for poster URLs
+const posterUrlCache = new Map<string, string>();
+
+export function posterUrlForSize(
+  path: string | null,
+  size: 'mobile' | 'desktop' | 'thumb',
+): string {
   // Return placeholder if no path provided
   if (!path) {
     return '/placeholder-movie-poster.svg';
+  }
+
+  // Create cache key
+  const cacheKey = `${path}-${size}`;
+
+  // Return cached result if available
+  if (posterUrlCache.has(cacheKey)) {
+    return posterUrlCache.get(cacheKey)!;
   }
 
   // Remove leading slash if present
@@ -13,11 +29,17 @@ export function posterUrlForSize(path: string | null, size: 'mobile' | 'desktop'
   // TMDB CDN base URL
   const baseUrl = 'https://image.tmdb.org/t/p/';
 
-  // Size mapping
+  // Size mapping - optimized for different use cases
   const sizeMap = {
-    mobile: 'w185',
-    desktop: 'w342', // Could also use 'w500' for higher quality
+    mobile: 'w185', // For mobile devices and small cards
+    desktop: 'w342', // For desktop cards and medium displays
+    thumb: 'w92', // For thumbnails and small previews
   };
 
-  return `${baseUrl}${sizeMap[size]}/${cleanPath}`;
+  const url = `${baseUrl}${sizeMap[size]}/${cleanPath}`;
+
+  // Cache the result
+  posterUrlCache.set(cacheKey, url);
+
+  return url;
 }

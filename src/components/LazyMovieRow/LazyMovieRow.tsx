@@ -35,6 +35,7 @@ const LazyMovieRow = forwardRef<HTMLDivElement, LazyMovieRowProps>(
           lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
         initialPageParam: 1,
         enabled: isVisible, // Only fetch when visible
+        staleTime: 60000, // 1 minute - carousels data
       },
     );
 
@@ -108,16 +109,16 @@ const LazyMovieRow = forwardRef<HTMLDivElement, LazyMovieRowProps>(
                 data-carousel-id={category}
                 ref={onCarouselRef}
               >
-               {allMovies.map((movie, index) => (
-                 <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
-                   <MovieCard 
-                     movie={movie} 
-                     onClick={() => handleMovieClick(movie)}
-                     category={category}
-                     showWishlistButton={true}
-                   />
-                 </div>
-               ))}
+                {allMovies.map((movie, index) => (
+                  <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
+                    <MovieCard
+                      movie={movie}
+                      onClick={() => handleMovieClick(movie)}
+                      category={category}
+                      showWishlistButton={true}
+                    />
+                  </div>
+                ))}
                 {/* Show loading skeletons while fetching next page */}
                 {isFetchingNextPage && (
                   <>
