@@ -12,6 +12,7 @@ interface LazyMovieRowProps {
   category: Category;
   title: string;
   onCarouselRef?: (ref: HTMLDivElement | null) => void;
+  onMovieClick?: (movie: MovieSummary, category: Category) => void;
 }
 
 const fetchFunctions = {
@@ -21,10 +22,11 @@ const fetchFunctions = {
 };
 
 const LazyMovieRow = forwardRef<HTMLDivElement, LazyMovieRowProps>(
-  ({ category, title, onCarouselRef }, ref) => {
+  ({ category, title, onCarouselRef, onMovieClick }, ref) => {
     const navigate = useNavigate();
-    const [isVisible, setIsVisible] = useState(false);
-    const [hasMounted, setHasMounted] = useState(false);
+    // Load popular movies immediately, others lazily
+    const [isVisible, setIsVisible] = useState(category === 'popular');
+    const [hasMounted, setHasMounted] = useState(category === 'popular');
     const rowRef = useRef<HTMLDivElement>(null);
 
     const { data, isLoading, isError, error, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
@@ -44,9 +46,13 @@ const LazyMovieRow = forwardRef<HTMLDivElement, LazyMovieRowProps>(
 
     // Navigation handler
     const handleMovieClick = (movie: MovieSummary) => {
-      navigate(`/movie/${movie.id}`, {
-        state: { category },
-      });
+      if (onMovieClick) {
+        onMovieClick(movie, category);
+      } else {
+        navigate(`/movie/${movie.id}`, {
+          state: { category },
+        });
+      }
     };
 
     // Set up IntersectionObserver

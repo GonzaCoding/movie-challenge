@@ -158,24 +158,27 @@
 
     // Category-based button modifiers
     &--popular {
-      background: $color-accent;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
       color: white;
+      border: none;
       
       &:hover {
-        background: color.scale($color-accent, $lightness: -10%);
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
         transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
       }
     }
 
-    &--top-rated {
-      background: transparent;
-      color: #ffd700;
-      border: 2px solid #ffd700;
+    &--top_rated {
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      color: white;
+      border: none;
+      font-weight: 700;
       
       &:hover {
-        background: #ffd700;
-        color: $color-bg;
+        background: linear-gradient(135deg, #15803d 0%, #166534 100%);
         transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
       }
     }
 

@@ -7,7 +7,7 @@ import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { CardSkeleton } from '../../components/Skeleton';
 import { posterUrlForSize } from '../../utils/images';
 import { toggleWishlistItem } from '../../redux/appSlice';
-import type { AppState, WishlistItem } from '../../types/tmdb';
+import type { AppState, WishlistItem, Category } from '../../types/tmdb';
 import './MovieDetailPage.scss';
 
 function MovieDetailPage() {
@@ -17,7 +17,7 @@ function MovieDetailPage() {
   const movieId = id ? parseInt(id, 10) : 0;
 
   // Get category from route state, fallback to 'popular'
-  const category = (location.state as { category?: string })?.category || 'popular';
+  const category = (location.state as { category?: Category })?.category || 'popular';
 
   // Redux state
   const wishlist = useSelector((state: { app: AppState }) => state.app.wishlist);
@@ -30,7 +30,7 @@ function MovieDetailPage() {
         id: movie.id,
         title: movie.title,
         poster_path: movie.poster_path,
-        category: category as 'popular' | 'top_rated' | 'upcoming',
+        category,
       };
       dispatch(toggleWishlistItem(wishlistItem));
     }

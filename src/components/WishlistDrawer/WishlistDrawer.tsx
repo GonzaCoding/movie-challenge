@@ -70,7 +70,7 @@ export default function WishlistDrawer({ onClose, openerRef }: WishlistDrawerPro
       case 'popular':
         return 'wishlist-drawer__badge--popular';
       case 'top_rated':
-        return 'wishlist-drawer__badge--top-rated';
+        return 'wishlist-drawer__badge--top_rated';
       case 'upcoming':
         return 'wishlist-drawer__badge--upcoming';
       default:
