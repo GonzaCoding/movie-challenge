@@ -119,7 +119,7 @@ describe('MovieCard', () => {
 
   it('should not call onClick when wishlist button is clicked', () => {
     const mockOnClick = jest.fn();
-    const { container } = renderWithProvider(
+    renderWithProvider(
       <MovieCard
         movie={mockMovie}
         onClick={mockOnClick}

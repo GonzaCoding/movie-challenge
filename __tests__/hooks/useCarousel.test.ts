@@ -1,11 +1,13 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { useCarousel } from '../../src/components/Carousel/useCarousel';
 
 // Mock IntersectionObserver
 const mockIntersectionObserver = jest.fn();
-let observerCallback: (entries: any[]) => void;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let observerCallback: (entries: IntersectionObserverEntry[]) => void;
 
 mockIntersectionObserver.mockImplementation((callback) => {
+  // Store callback for testing
   observerCallback = callback;
   return {
     observe: () => null,

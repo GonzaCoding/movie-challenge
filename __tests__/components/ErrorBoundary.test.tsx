@@ -27,7 +27,7 @@ describe('ErrorBoundary', () => {
     render(
       <ErrorBoundary>
         <div>Test content</div>
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     expect(screen.getByText('Test content')).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe('ErrorBoundary', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
@@ -49,38 +49,35 @@ describe('ErrorBoundary', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     expect(consoleSpy).toHaveBeenCalledWith(
       'ErrorBoundary caught an error:',
       expect.any(Error),
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 
   it('should call onError callback when provided', () => {
     const onError = jest.fn();
-    
+
     render(
       <ErrorBoundary onError={onError}>
         <ThrowError shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
-    expect(onError).toHaveBeenCalledWith(
-      expect.any(Error),
-      expect.any(Object)
-    );
+    expect(onError).toHaveBeenCalledWith(expect.any(Error), expect.any(Object));
   });
 
   it('should render custom fallback when provided', () => {
     const customFallback = <div>Custom error message</div>;
-    
+
     render(
       <ErrorBoundary fallback={customFallback}>
         <ThrowError shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     expect(screen.getByText('Custom error message')).toBeInTheDocument();
@@ -91,12 +88,12 @@ describe('ErrorBoundary', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     const retryButton = screen.getByRole('button', { name: 'Try again' });
     expect(retryButton).toBeInTheDocument();
-    
+
     // Test that the button can be clicked (it will call window.location.reload in real usage)
     fireEvent.click(retryButton);
     // Note: In real usage, this would reload the page, but in tests we just verify the button works
@@ -106,7 +103,7 @@ describe('ErrorBoundary', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     // Should show error fallback
@@ -119,7 +116,7 @@ describe('ErrorBoundary', () => {
     const { rerender } = render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     // First error
@@ -129,7 +126,7 @@ describe('ErrorBoundary', () => {
     rerender(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     // Should show error fallback again
@@ -140,7 +137,7 @@ describe('ErrorBoundary', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     const retryButton = screen.getByRole('button', { name: 'Try again' });
@@ -158,7 +155,7 @@ describe('ErrorBoundary', () => {
     render(
       <ErrorBoundary>
         <NestedComponent />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
@@ -182,7 +179,7 @@ describe('ErrorBoundary', () => {
     render(
       <ErrorBoundary>
         <ComponentWithEventError />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     // Should render normally since event handler errors are not caught by ErrorBoundary

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeWishlistItem, closeWishlist } from '../../redux/appSlice';
 import { posterUrlForSize } from '../../utils/images';
@@ -26,6 +26,16 @@ export default function WishlistDrawer({ onClose, openerRef }: WishlistDrawerPro
   }, [isOpen]);
 
   // Handle escape key
+  const handleClose = useCallback(() => {
+    dispatch(closeWishlist());
+    onClose();
+
+    // Return focus to the opener button
+    if (openerRef?.current) {
+      openerRef.current.focus();
+    }
+  }, [dispatch, onClose, openerRef]);
+
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
@@ -43,17 +53,7 @@ export default function WishlistDrawer({ onClose, openerRef }: WishlistDrawerPro
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
-
-  const handleClose = () => {
-    dispatch(closeWishlist());
-    onClose();
-
-    // Return focus to the opener button
-    if (openerRef?.current) {
-      openerRef.current.focus();
-    }
-  };
+  }, [isOpen, handleClose]);
 
   const handleRemoveItem = (id: number) => {
     dispatch(removeWishlistItem(id));

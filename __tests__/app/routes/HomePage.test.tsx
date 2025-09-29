@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
 
 // Create a simple test component that mimics HomePage navigation behavior
 function TestHomePage() {
-  const handleMovieClick = (movie: any, category: string) => {
+  const handleMovieClick = (movie: { id: number }, category: string) => {
     mockNavigate(`/movie/${movie.id}`, { state: { category } });
   };
 

@@ -7,7 +7,7 @@ import appReducer, {
   hydrate,
   getDefaultAppState,
 } from '../../src/redux/appSlice';
-import type { WishlistItem } from '../../src/types/tmdb';
+import type { WishlistItem, AppState } from '../../src/types/tmdb';
 
 describe('appSlice', () => {
   let store: ReturnType<typeof configureStore>;
@@ -21,7 +21,7 @@ describe('appSlice', () => {
   });
 
   it('should have initial state', () => {
-    const state = (store.getState() as any).app;
+    const state = (store.getState() as { app: AppState }).app;
     expect(state.wishlist).toEqual({});
     expect(state.ui.isWishlistOpen).toBe(false);
   });
@@ -35,11 +35,11 @@ describe('appSlice', () => {
     };
 
     store.dispatch(toggleWishlistItem(item));
-    let state = (store.getState() as any).app;
+    let state = (store.getState() as { app: AppState }).app;
     expect(state.wishlist[1]).toEqual(item);
 
     store.dispatch(toggleWishlistItem(item));
-    state = (store.getState() as any).app;
+    state = (store.getState() as { app: AppState }).app;
     expect(state.wishlist[1]).toBeUndefined();
   });
 
@@ -53,17 +53,17 @@ describe('appSlice', () => {
     store.dispatch(toggleWishlistItem(item));
     store.dispatch(removeWishlistItem(1));
 
-    const state = (store.getState() as any).app;
+    const state = (store.getState() as { app: AppState }).app;
     expect(state.wishlist[1]).toBeUndefined();
   });
 
   it('should open and close wishlist', () => {
     store.dispatch(openWishlist());
-    let state = (store.getState() as any).app;
+    let state = (store.getState() as { app: AppState }).app;
     expect(state.ui.isWishlistOpen).toBe(true);
 
     store.dispatch(closeWishlist());
-    state = (store.getState() as any).app;
+    state = (store.getState() as { app: AppState }).app;
     expect(state.ui.isWishlistOpen).toBe(false);
   });
 
@@ -75,7 +75,7 @@ describe('appSlice', () => {
     };
 
     store.dispatch(hydrate(hydratedState));
-    const state = (store.getState() as any).app;
+    const state = (store.getState() as { app: AppState }).app;
     expect(state.wishlist).toEqual(hydratedState.wishlist);
   });
 

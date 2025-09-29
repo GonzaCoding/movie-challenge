@@ -38,8 +38,8 @@ function HomePage() {
 
   // Save scroll position on unmount
   useEffect(() => {
+    const currentCarouselRefs = carouselRefs.current;
     return () => {
-      const currentCarouselRefs = carouselRefs.current;
       const carouselScrolls: Record<string, number> = {};
       Object.entries(currentCarouselRefs).forEach(([id, element]) => {
         if (element) {

@@ -25,29 +25,33 @@ A modern movie discovery application built with React, TypeScript, and server-si
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - TMDB API key
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd movie-challenge
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env
 ```
 
 4. Add your TMDB API key to `.env`:
+
 ```bash
 VITE_TMDB_API_KEY=your_tmdb_api_key_here
 ```
@@ -55,6 +59,7 @@ VITE_TMDB_API_KEY=your_tmdb_api_key_here
 ### Development
 
 Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -64,11 +69,13 @@ The app will be available at `http://localhost:3000`
 ### Production
 
 Build the application:
+
 ```bash
 npm run build
 ```
 
 Preview the production build:
+
 ```bash
 npm run preview
 ```
@@ -82,6 +89,7 @@ npm run preview:ssr
 ```
 
 **SSR Behavior:**
+
 - **Popular Movies**: Server-side rendered for fast initial load
 - **Top Rated & Upcoming**: Client-side rendered with lazy loading
 - **Movie Details**: Server-side rendered with SEO meta tags
@@ -89,11 +97,13 @@ npm run preview:ssr
 ### Testing
 
 Run unit tests:
+
 ```bash
 npm test
 ```
 
 Run tests with coverage:
+
 ```bash
 npm run test:coverage
 ```
@@ -101,11 +111,13 @@ npm run test:coverage
 ### Code Quality
 
 Lint the code:
+
 ```bash
 npm run lint
 ```
 
 Format the code:
+
 ```bash
 npm run format
 ```
@@ -123,7 +135,7 @@ src/
 └── utils/                 # Utility functions
 
 server/
-└── index.ts                 # SSR server implementation
+└── index.ts                 # Development and production SSR server
 
 __tests__/
 ├── components/            # Component unit tests

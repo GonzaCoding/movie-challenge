@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import WishlistDrawer from '../../src/components/WishlistDrawer';
@@ -26,13 +26,12 @@ const createMockStore = (initialState: Partial<AppState> = {}) => {
   });
 };
 
-const renderWithProvider = (component: React.ReactElement, initialState: Partial<AppState> = {}) => {
+const renderWithProvider = (
+  component: React.ReactElement,
+  initialState: Partial<AppState> = {},
+) => {
   const store = createMockStore(initialState);
-  return render(
-    <Provider store={store}>
-      {component}
-    </Provider>,
-  );
+  return render(<Provider store={store}>{component}</Provider>);
 };
 
 describe('WishlistDrawer', () => {
@@ -51,9 +50,7 @@ describe('WishlistDrawer', () => {
   });
 
   it('should not render when isWishlistOpen is false', () => {
-    renderWithProvider(
-      <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />
-    );
+    renderWithProvider(<WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />);
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
@@ -65,7 +62,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -93,7 +90,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     expect(screen.getByText('My Wishlist (2)')).toBeInTheDocument();
@@ -111,7 +108,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     expect(screen.getByText('Your wishlist is empty')).toBeInTheDocument();
@@ -125,7 +122,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     const closeButton = screen.getByLabelText('Close wishlist');
@@ -141,7 +138,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     const overlay = screen.getByRole('dialog').parentElement;
@@ -157,7 +154,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     const drawer = screen.getByRole('dialog');
@@ -179,14 +176,14 @@ describe('WishlistDrawer', () => {
       },
     };
 
-    const { container } = renderWithProvider(
+    renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     const removeButton = screen.getByLabelText('Remove Test Movie from wishlist');
     expect(removeButton).toBeInTheDocument();
-    
+
     fireEvent.click(removeButton);
 
     // The item should be removed from the store, so the button should no longer be in the document
@@ -200,7 +197,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     fireEvent.keyDown(document, { key: 'Escape' });
@@ -241,7 +238,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     expect(screen.getByText('Popular')).toBeInTheDocument();
@@ -257,7 +254,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     const dialog = screen.getByRole('dialog');
@@ -273,7 +270,7 @@ describe('WishlistDrawer', () => {
 
     renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     expect(document.body.style.overflow).toBe('hidden');
@@ -286,7 +283,7 @@ describe('WishlistDrawer', () => {
 
     const { unmount } = renderWithProvider(
       <WishlistDrawer onClose={mockOnClose} openerRef={mockOpenerRef} />,
-      initialState
+      initialState,
     );
 
     unmount();

@@ -19,8 +19,8 @@ describe('text utilities', () => {
   });
 
   it('should handle null/undefined gracefully', () => {
-    const result1 = truncate(null as any, 10);
-    const result2 = truncate(undefined as any, 10);
+    const result1 = truncate(null as unknown as string, 10);
+    const result2 = truncate(undefined as unknown as string, 10);
     expect(result1).toBe('');
     expect(result2).toBe('');
   });

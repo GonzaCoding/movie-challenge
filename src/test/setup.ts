@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom';
-// @ts-ignore
 import { TextDecoder, TextEncoder } from 'util';
 
 if (typeof globalThis.TextEncoder === 'undefined') {

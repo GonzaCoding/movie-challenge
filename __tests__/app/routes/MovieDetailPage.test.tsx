@@ -7,6 +7,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import MovieDetailPage from '../../../src/app/routes/MovieDetailPage';
 import appReducer from '../../../src/redux/appSlice';
 import type { AppState } from '../../../src/types/tmdb';
+import { fetchMovieDetail } from '../../../src/queries/tmdb';
 
 // Mock the TMDB queries
 jest.mock('../../../src/queries/tmdb', () => ({
@@ -105,8 +106,7 @@ describe('MovieDetailPage', () => {
 
   it('should render error state', async () => {
     mockUseParams.mockReturnValue({ id: '123' });
-    const { fetchMovieDetail } = require('../../../src/queries/tmdb');
-    fetchMovieDetail.mockRejectedValueOnce(new Error('Failed to fetch'));
+    (fetchMovieDetail as jest.Mock).mockRejectedValueOnce(new Error('Failed to fetch'));
 
     renderWithProviders(<MovieDetailPage />);
 
@@ -117,8 +117,7 @@ describe('MovieDetailPage', () => {
 
   it('should render movie not found state', async () => {
     mockUseParams.mockReturnValue({ id: '123' });
-    const { fetchMovieDetail } = require('../../../src/queries/tmdb');
-    fetchMovieDetail.mockResolvedValueOnce(null);
+    (fetchMovieDetail as jest.Mock).mockResolvedValueOnce(null);
 
     renderWithProviders(<MovieDetailPage />);
 
@@ -129,7 +128,7 @@ describe('MovieDetailPage', () => {
 
   it('should render movie details', async () => {
     mockUseParams.mockReturnValue({ id: '123' });
-    const { fetchMovieDetail } = require('../../../src/queries/tmdb');
+    // Using (fetchMovieDetail as jest.Mock) from jest.mock
 
     const mockMovie = {
       id: 123,
@@ -142,7 +141,7 @@ describe('MovieDetailPage', () => {
       poster_path: '/test-poster.jpg',
     };
 
-    fetchMovieDetail.mockResolvedValueOnce(mockMovie);
+    (fetchMovieDetail as jest.Mock).mockResolvedValueOnce(mockMovie);
 
     renderWithProviders(<MovieDetailPage />);
 
@@ -158,7 +157,7 @@ describe('MovieDetailPage', () => {
 
   it('should render movie details without optional fields', async () => {
     mockUseParams.mockReturnValue({ id: '123' });
-    const { fetchMovieDetail } = require('../../../src/queries/tmdb');
+    // Using (fetchMovieDetail as jest.Mock) from jest.mock
 
     const mockMovie = {
       id: 123,
@@ -167,7 +166,7 @@ describe('MovieDetailPage', () => {
       poster_path: '/test-poster.jpg',
     };
 
-    fetchMovieDetail.mockResolvedValueOnce(mockMovie);
+    (fetchMovieDetail as jest.Mock).mockResolvedValueOnce(mockMovie);
 
     renderWithProviders(<MovieDetailPage />);
 
@@ -194,8 +193,8 @@ describe('MovieDetailPage', () => {
     };
 
     beforeEach(() => {
-      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
-      fetchMovieDetail.mockResolvedValue(mockMovie);
+      // Using (fetchMovieDetail as jest.Mock) from jest.mock
+      (fetchMovieDetail as jest.Mock).mockResolvedValue(mockMovie);
     });
 
     it('should apply popular category class by default', async () => {
@@ -278,8 +277,8 @@ describe('MovieDetailPage', () => {
     };
 
     beforeEach(() => {
-      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
-      fetchMovieDetail.mockResolvedValue(mockMovie);
+      // Using (fetchMovieDetail as jest.Mock) from jest.mock
+      (fetchMovieDetail as jest.Mock).mockResolvedValue(mockMovie);
     });
 
     it('should render CTA button with popular category class', async () => {
@@ -340,8 +339,8 @@ describe('MovieDetailPage', () => {
     it('should render CTA button in error state with category class', async () => {
       mockUseParams.mockReturnValue({ id: '123' });
       mockUseLocation.mockReturnValue({ state: { category: 'upcoming' } });
-      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
-      fetchMovieDetail.mockRejectedValueOnce(new Error('Failed to fetch'));
+      // Using (fetchMovieDetail as jest.Mock) from jest.mock
+      (fetchMovieDetail as jest.Mock).mockRejectedValueOnce(new Error('Failed to fetch'));
 
       const { container } = renderWithProviders(<MovieDetailPage />);
 
@@ -356,8 +355,8 @@ describe('MovieDetailPage', () => {
     it('should render CTA button in not found state with category class', async () => {
       mockUseParams.mockReturnValue({ id: '123' });
       mockUseLocation.mockReturnValue({ state: { category: 'popular' } });
-      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
-      fetchMovieDetail.mockResolvedValueOnce(null);
+      // Using (fetchMovieDetail as jest.Mock) from jest.mock
+      (fetchMovieDetail as jest.Mock).mockResolvedValueOnce(null);
 
       const { container } = renderWithProviders(<MovieDetailPage />);
 
@@ -379,8 +378,8 @@ describe('MovieDetailPage', () => {
     };
 
     beforeEach(() => {
-      const { fetchMovieDetail } = require('../../../src/queries/tmdb');
-      fetchMovieDetail.mockResolvedValue(mockMovie);
+      // Using (fetchMovieDetail as jest.Mock) from jest.mock
+      (fetchMovieDetail as jest.Mock).mockResolvedValue(mockMovie);
     });
 
     it('should show "Add to Wishlist" when movie is not in wishlist', async () => {
@@ -426,7 +425,7 @@ describe('MovieDetailPage', () => {
       mockUseParams.mockReturnValue({ id: '123' });
       mockUseLocation.mockReturnValue({ state: { category: 'top-rated' } });
 
-      const { container } = renderWithProviders(<MovieDetailPage />);
+      renderWithProviders(<MovieDetailPage />);
 
       await waitFor(() => {
         expect(screen.getByText('Test Movie')).toBeInTheDocument();

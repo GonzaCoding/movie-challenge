@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+// Removed unused ReactNode import
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { QueryClientProvider, dehydrate } from '@tanstack/react-query';
@@ -51,7 +51,7 @@ export async function render(url: string) {
       await queryClient.prefetchInfiniteQuery({
         queryKey: moviesKey('popular'),
         queryFn: ({ pageParam = 1 }) => fetchPopular(pageParam),
-        getNextPageParam: (lastPage: any) =>
+        getNextPageParam: (lastPage: { page: number; total_pages: number }) =>
           lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
         initialPageParam: 1,
       });
