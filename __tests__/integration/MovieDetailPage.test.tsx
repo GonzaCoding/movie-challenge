@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import MovieDetailPage from '../../src/app/routes/MovieDetailPage';
 import appReducer from '../../src/redux/appSlice';
-import type { AppState, MovieDetail } from '../../src/types/tmdb';
+import type { MovieDetail } from '../../src/types/tmdb';
 
 // Mock react-router-dom
 const mockNavigate = jest.fn();

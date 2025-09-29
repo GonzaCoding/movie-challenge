@@ -6,7 +6,16 @@ import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import HomePage from '../../src/app/routes/HomePage';
 import appReducer from '../../src/redux/appSlice';
-import type { AppState, MovieSummary, PagedResponse } from '../../src/types/tmdb';
+import type { MovieSummary, PagedResponse } from '../../src/types/tmdb';
+import {
+  fetchPopular as mockFetchPopular,
+  fetchTopRated as mockFetchTopRated,
+  fetchUpcoming as mockFetchUpcoming,
+} from '../../src/queries/tmdb';
+
+const mockedFetchPopular = mockFetchPopular as jest.MockedFunction<typeof mockFetchPopular>;
+const mockedFetchTopRated = mockFetchTopRated as jest.MockedFunction<typeof mockFetchTopRated>;
+const mockedFetchUpcoming = mockFetchUpcoming as jest.MockedFunction<typeof mockFetchUpcoming>;
 
 // Mock the TMDB queries
 jest.mock('../../src/queries/tmdb', () => ({
@@ -117,10 +126,6 @@ const triggerIntersectionByTestId = (testId: string) => {
 };
 
 // Test utilities
-const waitForCarouselCards = (category: string, count: number) => {
-  const carousel = screen.getByTestId(`carousel-${category}`);
-  expect(carousel.querySelectorAll('[data-testid="movie-card"]').length).toBe(count);
-};
 
 describe('HomePage Integration Tests', () => {
   let queryClient: QueryClient;
@@ -255,10 +260,6 @@ describe('HomePage Integration Tests', () => {
       pageParams: [1],
     });
 
-    const mockedFetchPopular = require('../../src/queries/tmdb').fetchPopular as jest.Mock;
-    const mockedFetchTopRated = require('../../src/queries/tmdb').fetchTopRated as jest.Mock;
-    const mockedFetchUpcoming = require('../../src/queries/tmdb').fetchUpcoming as jest.Mock;
-
     mockedFetchPopular.mockImplementation(async (page: number) =>
       page === 1 ? mockPopularResponse : mockPopularPage2,
     );
@@ -302,7 +303,6 @@ describe('HomePage Integration Tests', () => {
     });
 
     // Mock fetchPopular to return page 2 data
-    const mockedFetchPopular = require('../../src/queries/tmdb').fetchPopular as jest.Mock;
     mockedFetchPopular.mockResolvedValue(mockPopularPage2);
 
     renderWithProviders(<HomePage />);
@@ -314,7 +314,6 @@ describe('HomePage Integration Tests', () => {
 
     // Trigger end sentinel observer for the popular carousel's sentinel
     act(() => {
-      const sentinel = screen.getByTestId('carousel-end-popular');
       triggerIntersectionByTestId('carousel-end-popular');
     });
 

@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import WishlistDrawer from '../../src/components/WishlistDrawer/WishlistDrawer';
 import appReducer from '../../src/redux/appSlice';
-import type { AppState, WishlistItem } from '../../src/types/tmdb';
+import type { WishlistItem } from '../../src/types/tmdb';
 
 // Mock the image utility
 jest.mock('../../src/utils/images', () => ({
