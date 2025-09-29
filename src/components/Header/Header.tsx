@@ -15,7 +15,7 @@ function Header() {
   const dispatch = useDispatch();
   const [isDrawerLoaded, setIsDrawerLoaded] = useState(false);
   const wishlistButtonRef = useRef<HTMLButtonElement>(null);
-  
+
   const isWishlistOpen = useSelector((state: { app: AppState }) => state.app.ui.isWishlistOpen);
   const wishlist = useSelector((state: { app: AppState }) => state.app.wishlist);
   const wishlistCount = Object.keys(wishlist).length;
@@ -57,11 +57,11 @@ function Header() {
         </h1>
       </div>
       <div className="header__actions">
-        <button 
+        <button
           ref={wishlistButtonRef}
-          className="header__wishlist-btn" 
+          className="header__wishlist-btn"
           onClick={handleWishlistClick}
-          aria-label={`Wishlist (${wishlistCount} items)`}
+          aria-label="Open wishlist"
         >
           Wishlist {wishlistCount > 0 && `(${wishlistCount})`}
         </button>
@@ -71,10 +71,7 @@ function Header() {
       {isDrawerLoaded && (
         <ErrorBoundary>
           <Suspense fallback={null}>
-            <WishlistDrawer 
-              onClose={handleDrawerClose}
-              openerRef={wishlistButtonRef}
-            />
+            <WishlistDrawer onClose={handleDrawerClose} openerRef={wishlistButtonRef} />
           </Suspense>
         </ErrorBoundary>
       )}

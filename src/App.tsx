@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Header from './components/Header/Header';
+import './App.scss';
 
 // Lazy load route components for code splitting
 const HomePage = lazy(() => import('./app/routes/HomePage'));
@@ -12,7 +13,7 @@ function AppLayout() {
   return (
     <>
       <Header />
-      <main>
+      <main className="app-main">
         <Outlet />
       </main>
     </>

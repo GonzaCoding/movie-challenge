@@ -1,0 +1,11 @@
+@use './styles/variables' as *;
+
+.app-main {
+  padding-top: 80px; // Account for fixed header height
+  min-height: 100vh;
+  background: $color-bg;
+
+  @media (max-width: $bp-mobile) {
+    padding-top: 70px; // Slightly smaller on mobile
+  }
+}
