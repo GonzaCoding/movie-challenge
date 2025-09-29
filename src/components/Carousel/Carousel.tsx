@@ -13,7 +13,12 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
     const { trackRef, endSentinelRef, scrollPrev, scrollNext } = useCarousel(onEndReached);
 
     return (
-      <div className="carousel" ref={ref} {...props}>
+      <div
+        className="carousel"
+        ref={ref}
+        data-testid={`carousel-${props['data-carousel-id'] ?? 'unknown'}`}
+        {...props}
+      >
         <button
           className="carousel__arrow carousel__arrow--left"
           onClick={scrollPrev}
@@ -23,9 +28,19 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
           ‹
         </button>
 
-        <div className="carousel__track" ref={trackRef}>
+        <div
+          className="carousel__track"
+          ref={trackRef}
+          data-testid={`carousel-track-${props['data-carousel-id'] ?? 'unknown'}`}
+        >
           {children}
-          {onEndReached && <div ref={endSentinelRef} className="carousel__sentinel" />}
+          {onEndReached && (
+            <div
+              ref={endSentinelRef}
+              className="carousel__sentinel"
+              data-testid={`carousel-end-${props['data-carousel-id'] ?? 'unknown'}`}
+            />
+          )}
         </div>
 
         <button

@@ -41,8 +41,8 @@ const MovieCard = React.memo(function MovieCard({
   );
 
   return (
-    <div className="movie-card" onClick={onClick}>
-      <div className="movie-card__image-container">
+    <div className="movie-card" onClick={onClick} data-testid="movie-card">
+      <div className="movie-card__image-container" data-testid="movie-card-image">
         <img
           className="movie-card__image"
           src={posterUrlForSize(movie.poster_path, 'mobile')}
@@ -50,7 +50,9 @@ const MovieCard = React.memo(function MovieCard({
           loading="lazy"
         />
       </div>
-      <h3 className="movie-card__title">{movie.title}</h3>
+      <h3 className="movie-card__title" data-testid="movie-card-title">
+        {movie.title}
+      </h3>
       {showWishlistButton && category && (
         <button
           className={`movie-card__wishlist-btn movie-card__wishlist-btn--${category}`}

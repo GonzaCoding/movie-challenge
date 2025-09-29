@@ -83,8 +83,8 @@ const LazyMovieRow = forwardRef<HTMLDivElement, LazyMovieRowProps>(
     }, [hasMounted]);
 
     return (
-      <section ref={ref} style={{ marginTop: '3rem' }}>
-        <div ref={rowRef}>
+      <section ref={ref} style={{ marginTop: '3rem' }} data-testid={`row-${category}`}>
+        <div ref={rowRef} data-testid={`row-observer-${category}`}>
           <h2>{title}</h2>
 
           {!isVisible && (
