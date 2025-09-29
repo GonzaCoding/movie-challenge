@@ -1,5 +1,4 @@
 import React, { Component, type ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './ErrorBoundary.scss';
 
 interface ErrorBoundaryProps {
@@ -19,14 +18,8 @@ function ErrorFallback({ onRetry }: { onRetry: () => void }) {
     <div className="error-boundary">
       <div className="error-boundary__content">
         <h2 className="error-boundary__title">Something went wrong</h2>
-        <p className="error-boundary__message">
-          An unexpected error occurred. Please try again.
-        </p>
-        <button 
-          className="error-boundary__retry-btn" 
-          onClick={onRetry}
-          type="button"
-        >
+        <p className="error-boundary__message">An unexpected error occurred. Please try again.</p>
+        <button className="error-boundary__retry-btn" onClick={onRetry} type="button">
           Try again
         </button>
       </div>
@@ -46,7 +39,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+
     // Call the onError callback if provided
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
@@ -55,7 +48,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   handleRetry = () => {
     this.setState({ hasError: false, error: undefined });
-    
+
     // Reload the current route by navigating to the same path
     window.location.reload();
   };
@@ -66,7 +59,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       if (this.props.fallback) {
         return this.props.fallback;
       }
-      
+
       return <ErrorFallback onRetry={this.handleRetry} />;
     }
 

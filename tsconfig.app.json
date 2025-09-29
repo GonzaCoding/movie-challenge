@@ -33,7 +33,9 @@
       "@queries/*": ["src/queries/*"],
       "@types/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"],
-      "@styles/*": ["src/styles/*"]
+      "@styles/*": ["src/styles/*"],
+      "react-router-dom/server": ["./node_modules/react-router-dom/dist/server.mjs"],
+      "react/jsx-dev-runtime": ["./node_modules/react/jsx-dev-runtime.js"]
     }
   },
   "include": ["src"]

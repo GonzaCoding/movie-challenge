@@ -1,4 +1,7 @@
 import express from 'express';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { createServer as createViteServer } from 'vite';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -14,7 +17,7 @@ async function createServer() {
       server: { middlewareMode: true },
       appType: 'custom',
     });
-    app.use(vite.ssrLoadModule);
+    app.use(vite.middlewares);
   } else {
     // In production, serve static files
     app.use(express.static('dist/client'));
@@ -36,12 +39,14 @@ async function createServer() {
 
       if (!isProduction && vite) {
         // In dev mode, load the SSR module
-        template = await vite.transformIndexHtml(url, await vite.readFile('index.html', 'utf-8'));
+        const rootTemplate = await readFile(path.resolve(process.cwd(), 'index.html'), 'utf-8');
+        template = await vite.transformIndexHtml(url, rootTemplate);
         render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render;
       } else {
         // In production, load the built server bundle
-        const serverModule = await import('dist/server/entry-server.js');
-        template = await import('index.html');
+        const entryUrl = pathToFileURL(path.resolve(process.cwd(), 'dist/server/server.js')).href;
+        const serverModule = await import(entryUrl);
+        template = await readFile(path.resolve(process.cwd(), 'dist/client/index.html'), 'utf-8');
         render = serverModule.render;
       }
 
@@ -51,10 +56,7 @@ async function createServer() {
       const finalHtml = template
         .replace('<!--app-html-->', html)
         .replace('<!--head-tags-->', headTags)
-        .replace(
-          '<script>',
-          `<script>window.__DEHYDRATED_STATE__ = ${JSON.stringify(dehydratedState)};`,
-        );
+        .replace('<!--dehydrated-state-->', JSON.stringify(dehydratedState));
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(finalHtml);
     } catch (e: unknown) {

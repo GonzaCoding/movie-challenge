@@ -22,6 +22,10 @@ export default defineConfig({
       '@styles': resolveFromRoot('./src/styles'),
     },
   },
+  build: {
+    outDir: 'dist/client',
+    emptyOutDir: true,
+  },
   server: {
     proxy: {
       '/api': {
@@ -43,13 +47,7 @@ export default defineConfig({
     },
   },
   ssr: {
-    noExternal: [
-      'react',
-      'react-dom',
-      'react-router-dom',
-      '@reduxjs/toolkit',
-      'react-redux',
-      '@tanstack/react-query',
-    ],
+    noExternal: ['react-router-dom', '@reduxjs/toolkit', 'react-redux', '@tanstack/react-query'],
+    external: ['react/jsx-runtime', 'react/jsx-dev-runtime'],
   },
 });

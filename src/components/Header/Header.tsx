@@ -1,13 +1,11 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useRef, Suspense, lazy } from 'react';
+import { useState, useRef } from 'react';
 import { openWishlist } from '../../redux/appSlice';
 import { ErrorBoundary } from '../ErrorBoundary';
+import WishlistDrawer from '../WishlistDrawer';
 import type { AppState } from '../../types/tmdb';
 import './Header.scss';
-
-// Lazy load the WishlistDrawer
-const WishlistDrawer = lazy(() => import('../WishlistDrawer'));
 
 function Header() {
   const navigate = useNavigate();
@@ -16,7 +14,6 @@ function Header() {
   const [isDrawerLoaded, setIsDrawerLoaded] = useState(false);
   const wishlistButtonRef = useRef<HTMLButtonElement>(null);
 
-  const isWishlistOpen = useSelector((state: { app: AppState }) => state.app.ui.isWishlistOpen);
   const wishlist = useSelector((state: { app: AppState }) => state.app.wishlist);
   const wishlistCount = Object.keys(wishlist).length;
 
@@ -70,9 +67,7 @@ function Header() {
       {/* Lazy-loaded WishlistDrawer */}
       {isDrawerLoaded && (
         <ErrorBoundary>
-          <Suspense fallback={null}>
-            <WishlistDrawer onClose={handleDrawerClose} openerRef={wishlistButtonRef} />
-          </Suspense>
+          <WishlistDrawer onClose={handleDrawerClose} openerRef={wishlistButtonRef} />
         </ErrorBoundary>
       )}
     </header>

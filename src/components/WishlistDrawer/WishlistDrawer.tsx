@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeWishlistItem, closeWishlist } from '../../redux/appSlice';
 import { posterUrlForSize } from '../../utils/images';
-import type { AppState, WishlistItem, Category } from '../../types/tmdb';
+import type { AppState, Category } from '../../types/tmdb';
 import './WishlistDrawer.scss';
 
 interface WishlistDrawerProps {
   onClose: () => void;
-  openerRef?: React.RefObject<HTMLButtonElement>;
+  openerRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
 export default function WishlistDrawer({ onClose, openerRef }: WishlistDrawerProps) {
