@@ -1,4 +1,5 @@
 @use '../../styles/variables' as *;
+@use 'sass:color';
 
 .movie-card {
   display: flex;
@@ -10,7 +11,7 @@
   transition: all 200ms ease;
   border: 1px solid transparent;
   width: 200px;
-  height: 320px;
+  height: 380px; // Increased to accommodate button
   flex-shrink: 0;
 
   &:hover {
@@ -25,6 +26,59 @@
     height: 240px;
     overflow: hidden;
     background: $color-bg;
+  }
+
+  &__wishlist-btn {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: $radius-md;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: center;
+
+    // Category-based button modifiers (same as detail page)
+    &--popular {
+      background: $color-accent;
+      color: white;
+      
+      &:hover {
+        background: color.scale($color-accent, $lightness: -10%);
+        transform: translateY(-1px);
+      }
+    }
+
+    &--top-rated {
+      background: transparent;
+      color: #ffd700;
+      border: 2px solid #ffd700;
+      
+      &:hover {
+        background: #ffd700;
+        color: $color-bg;
+        transform: translateY(-1px);
+      }
+    }
+
+    &--upcoming {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      
+      &:hover {
+        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+    }
+
+    &:focus {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
   }
 
   &__image {

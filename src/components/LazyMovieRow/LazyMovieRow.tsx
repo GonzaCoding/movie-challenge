@@ -108,11 +108,16 @@ const LazyMovieRow = forwardRef<HTMLDivElement, LazyMovieRowProps>(
                 data-carousel-id={category}
                 ref={onCarouselRef}
               >
-                {allMovies.map((movie, index) => (
-                  <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
-                    <MovieCard movie={movie} onClick={() => handleMovieClick(movie)} />
-                  </div>
-                ))}
+               {allMovies.map((movie, index) => (
+                 <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
+                   <MovieCard 
+                     movie={movie} 
+                     onClick={() => handleMovieClick(movie)}
+                     category={category}
+                     showWishlistButton={true}
+                   />
+                 </div>
+               ))}
                 {/* Show loading skeletons while fetching next page */}
                 {isFetchingNextPage && (
                   <>

@@ -292,7 +292,7 @@ describe('MovieDetailPage', () => {
         expect(screen.getByText('Test Movie')).toBeInTheDocument();
       });
 
-      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      const ctaButton = screen.getByRole('button', { name: /Add to Wishlist/ });
       expect(ctaButton).toBeInTheDocument();
       expect(ctaButton).toHaveClass('movie-detail__cta--popular');
     });
@@ -307,7 +307,7 @@ describe('MovieDetailPage', () => {
         expect(screen.getByText('Test Movie')).toBeInTheDocument();
       });
 
-      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      const ctaButton = screen.getByRole('button', { name: /Add to Wishlist/ });
       expect(ctaButton).toBeInTheDocument();
       expect(ctaButton).toHaveClass('movie-detail__cta--top-rated');
     });
@@ -322,7 +322,7 @@ describe('MovieDetailPage', () => {
         expect(screen.getByText('Test Movie')).toBeInTheDocument();
       });
 
-      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      const ctaButton = screen.getByRole('button', { name: /Add to Wishlist/ });
       expect(ctaButton).toBeInTheDocument();
       expect(ctaButton).toHaveClass('movie-detail__cta--upcoming');
     });
@@ -393,7 +393,7 @@ describe('MovieDetailPage', () => {
         expect(screen.getByText('Test Movie')).toBeInTheDocument();
       });
 
-      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      const ctaButton = screen.getByRole('button', { name: /Add to Wishlist/ });
       expect(ctaButton).toBeInTheDocument();
     });
 
@@ -418,7 +418,7 @@ describe('MovieDetailPage', () => {
         expect(screen.getByText('Test Movie')).toBeInTheDocument();
       });
 
-      const ctaButton = screen.getByRole('button', { name: 'Remove from Wishlist' });
+      const ctaButton = screen.getByRole('button', { name: /Remove from Wishlist/ });
       expect(ctaButton).toBeInTheDocument();
     });
 
@@ -432,7 +432,7 @@ describe('MovieDetailPage', () => {
         expect(screen.getByText('Test Movie')).toBeInTheDocument();
       });
 
-      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      const ctaButton = screen.getByRole('button', { name: /Add to Wishlist/ });
       expect(ctaButton).toBeInTheDocument();
 
       // Click the button
@@ -440,7 +440,7 @@ describe('MovieDetailPage', () => {
 
       // Button text should change to "Remove from Wishlist"
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: 'Remove from Wishlist' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Remove from Wishlist/ })).toBeInTheDocument();
       });
     });
 
@@ -454,13 +454,13 @@ describe('MovieDetailPage', () => {
         expect(screen.getByText('Test Movie')).toBeInTheDocument();
       });
 
-      const ctaButton = screen.getByRole('button', { name: 'Add to Wishlist' });
+      const ctaButton = screen.getByRole('button', { name: /Add to Wishlist/ });
       expect(ctaButton).toHaveClass('movie-detail__cta--upcoming');
 
       fireEvent.click(ctaButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: 'Remove from Wishlist' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Remove from Wishlist/ })).toBeInTheDocument();
       });
     });
 

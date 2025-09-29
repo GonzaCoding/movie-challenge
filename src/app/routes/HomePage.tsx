@@ -98,7 +98,12 @@ function HomePage() {
             >
               {allMovies.map((movie, index) => (
                 <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
-                  <MovieCard movie={movie} onClick={() => handleMovieClick(movie, 'popular')} />
+                  <MovieCard 
+                    movie={movie} 
+                    onClick={() => handleMovieClick(movie, 'popular')}
+                    category="popular"
+                    showWishlistButton={true}
+                  />
                 </div>
               ))}
               {/* Show loading skeletons while fetching next page */}
