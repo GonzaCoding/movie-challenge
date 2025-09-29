@@ -5,6 +5,7 @@ import { MovieCard } from '../../components/MovieCard';
 import { Carousel } from '../../components/Carousel';
 import { CardSkeleton, RowSkeleton } from '../../components/Skeleton';
 import { ErrorPanel } from '../../components/ErrorPanel';
+import { ErrorBoundary } from '../../components/ErrorBoundary';
 import LazyMovieRow from '../../components/LazyMovieRow';
 import { fetchPopular, moviesKey } from '../../queries/tmdb';
 import { useScrollRestoration } from '../../utils/scrollRestoration';
@@ -69,79 +70,85 @@ function HomePage() {
   return (
     <div style={{ padding: '0 1.5rem' }}>
       {/* Popular Movies Section */}
-      <section style={{ marginTop: '4rem' }}>
-        <h2>Popular Movies</h2>
+      <ErrorBoundary>
+        <section style={{ marginTop: '4rem' }}>
+          <h2>Popular Movies</h2>
 
-        {isLoading && (
-          <div style={{ marginTop: '1rem' }}>
-            <RowSkeleton count={5} />
-          </div>
-        )}
+          {isLoading && (
+            <div style={{ marginTop: '1rem' }}>
+              <RowSkeleton count={5} />
+            </div>
+          )}
 
-        {isError && (
-          <div style={{ marginTop: '1rem' }}>
-            <ErrorPanel
-              message={error?.message || 'Failed to load popular movies'}
-              onRetry={() => refetch()}
-            />
-          </div>
-        )}
+          {isError && (
+            <div style={{ marginTop: '1rem' }}>
+              <ErrorPanel
+                message={error?.message || 'Failed to load popular movies'}
+                onRetry={() => refetch()}
+              />
+            </div>
+          )}
 
-        {allMovies.length > 0 && (
-          <div style={{ marginTop: '1rem' }}>
-            <Carousel 
-              onEndReached={() => fetchNextPage()}
-              data-carousel-id="popular"
-              ref={(el) => {
-                carouselRefs.current.popular = el;
-              }}
-            >
-              {allMovies.map((movie, index) => (
-                <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
-                  <MovieCard 
-                    movie={movie} 
-                    onClick={() => handleMovieClick(movie, 'popular')}
-                    category="popular"
-                    showWishlistButton={true}
-                  />
-                </div>
-              ))}
-              {/* Show loading skeletons while fetching next page */}
-              {isFetchingNextPage && (
-                <>
-                  <div key="skeleton-1" style={{ flex: '0 0 200px' }}>
-                    <CardSkeleton />
+          {allMovies.length > 0 && (
+            <div style={{ marginTop: '1rem' }}>
+              <Carousel 
+                onEndReached={() => fetchNextPage()}
+                data-carousel-id="popular"
+                ref={(el) => {
+                  carouselRefs.current.popular = el;
+                }}
+              >
+                {allMovies.map((movie, index) => (
+                  <div key={`${movie.id}-${index}`} style={{ flex: '0 0 200px' }}>
+                    <MovieCard 
+                      movie={movie} 
+                      onClick={() => handleMovieClick(movie, 'popular')}
+                      category="popular"
+                      showWishlistButton={true}
+                    />
                   </div>
-                  <div key="skeleton-2" style={{ flex: '0 0 200px' }}>
-                    <CardSkeleton />
-                  </div>
-                  <div key="skeleton-3" style={{ flex: '0 0 200px' }}>
-                    <CardSkeleton />
-                  </div>
-                </>
-              )}
-            </Carousel>
-          </div>
-        )}
-      </section>
+                ))}
+                {/* Show loading skeletons while fetching next page */}
+                {isFetchingNextPage && (
+                  <>
+                    <div key="skeleton-1" style={{ flex: '0 0 200px' }}>
+                      <CardSkeleton />
+                    </div>
+                    <div key="skeleton-2" style={{ flex: '0 0 200px' }}>
+                      <CardSkeleton />
+                    </div>
+                    <div key="skeleton-3" style={{ flex: '0 0 200px' }}>
+                      <CardSkeleton />
+                    </div>
+                  </>
+                )}
+              </Carousel>
+            </div>
+          )}
+        </section>
+      </ErrorBoundary>
 
       {/* Lazy-loaded Top Rated Movies */}
-      <LazyMovieRow 
-        category="top_rated" 
-        title="Top Rated Movies"
-        onCarouselRef={(el) => {
-          carouselRefs.current.top_rated = el;
-        }}
-      />
+      <ErrorBoundary>
+        <LazyMovieRow 
+          category="top_rated" 
+          title="Top Rated Movies"
+          onCarouselRef={(el) => {
+            carouselRefs.current.top_rated = el;
+          }}
+        />
+      </ErrorBoundary>
 
       {/* Lazy-loaded Upcoming Movies */}
-      <LazyMovieRow 
-        category="upcoming" 
-        title="Upcoming Movies"
-        onCarouselRef={(el) => {
-          carouselRefs.current.upcoming = el;
-        }}
-      />
+      <ErrorBoundary>
+        <LazyMovieRow 
+          category="upcoming" 
+          title="Upcoming Movies"
+          onCarouselRef={(el) => {
+            carouselRefs.current.upcoming = el;
+          }}
+        />
+      </ErrorBoundary>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchMovieDetail, movieKey } from '../../queries/tmdb';
 import { ErrorPanel } from '../../components/ErrorPanel';
+import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { CardSkeleton } from '../../components/Skeleton';
 import { posterUrlForSize } from '../../utils/images';
 import { toggleWishlistItem } from '../../redux/appSlice';
@@ -80,53 +81,55 @@ function MovieDetailPage() {
   }
 
   return (
-    <div className={`movie-detail movie-detail--${category}`}>
-      <div className="movie-detail__content">
-        <div className="movie-detail__poster">
-          <img
-            src={posterUrlForSize(movie.poster_path, 'desktop')}
-            alt={movie.title}
-            className="movie-detail__poster-image"
-          />
-        </div>
-
-        <div className="movie-detail__info">
-          <h1 className="movie-detail__title">{movie.title}</h1>
-
-          {movie.tagline && <p className="movie-detail__tagline">"{movie.tagline}"</p>}
-
-          <div className="movie-detail__meta">
-            {movie.release_date && (
-              <span className="movie-detail__year">
-                {new Date(movie.release_date).getFullYear()}
-              </span>
-            )}
-            {movie.runtime && (
-              <span className="movie-detail__runtime">{movie.runtime} minutes</span>
-            )}
-            {movie.vote_average && (
-              <span className="movie-detail__rating">⭐ {movie.vote_average.toFixed(1)}/10</span>
-            )}
+    <ErrorBoundary>
+      <div className={`movie-detail movie-detail--${category}`}>
+        <div className="movie-detail__content">
+          <div className="movie-detail__poster">
+            <img
+              src={posterUrlForSize(movie.poster_path, 'desktop')}
+              alt={movie.title}
+              className="movie-detail__poster-image"
+            />
           </div>
 
-          {movie.overview && (
-            <div className="movie-detail__overview">
-              <h2>Overview</h2>
-              <p>{movie.overview}</p>
-            </div>
-          )}
+          <div className="movie-detail__info">
+            <h1 className="movie-detail__title">{movie.title}</h1>
 
-          <div className="movie-detail__actions">
-            <button
-              className={`movie-detail__cta movie-detail__cta--${category}`}
-              onClick={handleWishlistToggle}
-            >
-              {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
-            </button>
+            {movie.tagline && <p className="movie-detail__tagline">"{movie.tagline}"</p>}
+
+            <div className="movie-detail__meta">
+              {movie.release_date && (
+                <span className="movie-detail__year">
+                  {new Date(movie.release_date).getFullYear()}
+                </span>
+              )}
+              {movie.runtime && (
+                <span className="movie-detail__runtime">{movie.runtime} minutes</span>
+              )}
+              {movie.vote_average && (
+                <span className="movie-detail__rating">⭐ {movie.vote_average.toFixed(1)}/10</span>
+              )}
+            </div>
+
+            {movie.overview && (
+              <div className="movie-detail__overview">
+                <h2>Overview</h2>
+                <p>{movie.overview}</p>
+              </div>
+            )}
+
+            <div className="movie-detail__actions">
+              <button
+                className={`movie-detail__cta movie-detail__cta--${category}`}
+                onClick={handleWishlistToggle}
+              >
+                {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 }
 

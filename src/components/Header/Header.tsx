@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useRef, Suspense, lazy } from 'react';
 import { openWishlist } from '../../redux/appSlice';
+import { ErrorBoundary } from '../ErrorBoundary';
 import type { AppState } from '../../types/tmdb';
 import './Header.scss';
 
@@ -68,12 +69,14 @@ function Header() {
 
       {/* Lazy-loaded WishlistDrawer */}
       {isDrawerLoaded && (
-        <Suspense fallback={null}>
-          <WishlistDrawer 
-            onClose={handleDrawerClose}
-            openerRef={wishlistButtonRef}
-          />
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={null}>
+            <WishlistDrawer 
+              onClose={handleDrawerClose}
+              openerRef={wishlistButtonRef}
+            />
+          </Suspense>
+        </ErrorBoundary>
       )}
     </header>
   );
